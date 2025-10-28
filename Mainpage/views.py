@@ -252,7 +252,7 @@ def logout_view(request):
     messages.success(request, "You have successfully logged out!")
     return redirect('home')
 
-@login_required
+@login_required(login_url='login')
 def profile(request):
     categories = Category.objects.all()
     user = request.user 
@@ -293,7 +293,7 @@ def partnership(request):
     wishlist_products = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
     return render(request,'partnership.html', {'products': products,'wishlist_products': wishlist_products,'categories': categories})
 
-@login_required
+@login_required(login_url='login')
 def toggle_wishlist(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -310,6 +310,7 @@ def toggle_wishlist(request):
             return JsonResponse({'added': False})
         return JsonResponse({'added': True})
 
+@login_required(login_url='login')
 def wishlist(request):
     categories = Category.objects.all()
     wishlist_products = Product.objects.filter(wishlist__user=request.user)
@@ -321,7 +322,7 @@ def careplan(request):
     wishlist_products = Product.objects.filter(wishlist__user=request.user).values_list('id', flat=True) if request.user.is_authenticated else []
     return render(request, 'careplan.html', {'products': products, 'wishlist_products': wishlist_products,'categories': categories})
 
-@login_required
+@login_required(login_url='login')
 def delete_wishlist_item(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -335,6 +336,7 @@ def delete_wishlist_item(request):
             return JsonResponse({"error": "Product not found"}, status=404)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@login_required(login_url='login')
 def cart(request):
     categories = Category.objects.all()
     cart_items = Cart.objects.filter(user=request.user)
@@ -357,7 +359,7 @@ def cart(request):
 
 from django.views.decorators.csrf import csrf_exempt
 
-@login_required
+@login_required(login_url='login')
 @csrf_exempt
 def add_to_cart(request):
     if request.method == 'POST':
@@ -406,7 +408,11 @@ def product_detail(request, id):
         Q(subcategories__in=product.subcategories.all())
     ).exclude(id=product.id).distinct()[:4]
     products = Product.objects.all()
-    wishlist_products = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+
+    if request.user.is_authenticated:
+        wishlist_products = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+    else:
+        wishlist_products = []
 
     context = {
         'product': product,
@@ -418,7 +424,8 @@ def product_detail(request, id):
 
     return render(request, 'product_detail.html', context)
 
-@login_required
+
+@login_required(login_url='login')
 def checkout(request):
     user = request.user
     cart_items = Cart.objects.filter(user=user)
@@ -450,7 +457,7 @@ def checkout(request):
     }
     return render(request, 'checkout.html', context)
 
-@login_required
+@login_required(login_url='login')
 def payment_success(request):
     """Called after successful payment — create order, clear cart & show success message"""
     user = request.user
@@ -476,7 +483,7 @@ def payment_success(request):
     cart_items.delete()
     return render(request, 'payment_success.html', {'order': order})
 
-@login_required
+@login_required(login_url='login')
 def ordered_items_view(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'ordered_items.html', {'orders': orders})
@@ -557,7 +564,7 @@ def book_service_payment(request, service_id):
     }
     return render(request, "servicebooking.html", context)
 
-@login_required
+@login_required(login_url='login')
 def service_payment_success(request):
     if request.method == "POST":
         # Payment details from Razorpay

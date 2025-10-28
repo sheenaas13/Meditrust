@@ -64,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Mainpage.context_processors.wishlist_count',
+                'Mainpage.context_processors.cart_count',
             ],
         },
     },
@@ -147,3 +149,6 @@ AUTH_USER_MODEL = 'Mainpage.CustomUser'
 RAZORPAY_KEY_ID = "rzp_test_RTG5YlPCt0jk2i"
 RAZORPAY_KEY_SECRET = "VohzzgccAsPWyEs4ZgThmjQu"
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'      # where to go after login
+LOGOUT_REDIRECT_URL = 'home'     # where to go after logout

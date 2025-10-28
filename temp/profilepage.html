@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Cancer Care{% endblock %}
+
+{% block content %}
+
+<section class="profilepage-dashboard">
+    <aside class="profilepage-sidebar">
+        <ul class="profilepage-menu">
+            <li><a href="#" class="profilepage-active"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa-solid fa-envelope"></i> Change Email</a></li>
+            <li><a href="#"><i class="fa-solid fa-phone"></i> Change Contact</a></li>
+            <li><a href="#"><i class="fa-solid fa-cart-shopping"></i> View Cart Items</a></li>
+            <li><a href="#ordered-items" id="view-orders-link"><i class="fa-solid fa-box"></i> View Ordered Items</a>
+            </li>
+        </ul>
+
+        <div class="profilepage-logout">
+            <a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <section class="profilepage-main-content">
+        <div class="profilepage-header">
+            <h1>Welcome, {{ user.first_name }} <i class="fa-solid fa-hospital"></i></h1>
+            <p>Manage your account details and preferences below.</p>
+        </div>
+
+        <div class="profilepage-card">
+            <h2>Your Profile</h2>
+            <p>Update your personal information and click Save Changes when done.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="profilepage-form-row">
+                    <input type="text" name="first_name" placeholder="First Name" value="{{ user.first_name }}"
+                        required>
+                    <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}" required>
+                </div>
+
+                <div class="profilepage-form-row">
+                    <input type="date" name="birth_date" value="{{ user.birth_date|default_if_none:'' }}">
+                    <input type="text" name="gender" placeholder="Gender" value="{{ user.gender|default_if_none:'' }}">
+                </div>
+
+                <div class="profilepage-form-group">
+                    <input type="text" name="street_address" placeholder="Street Address"
+                        value="{{ user.street_address|default_if_none:'' }}">
+                </div>
+
+                <div class="profilepage-form-row">
+                    <input type="text" name="city" placeholder="City" value="{{ user.city|default_if_none:'' }}">
+                    <input type="text" name="state" placeholder="State" value="{{ user.state|default_if_none:'' }}">
+                </div>
+
+                <div class="profilepage-form-row">
+                    <input type="text" name="zip_code" placeholder="Zip Code"
+                        value="{{ user.zip_code|default_if_none:'' }}">
+                </div>
+
+                <div class="profilepage-form-row">
+                    <input type="text" name="contact_no" placeholder="Contact No."
+                        value="{{ user.contact_no|default_if_none:'' }}">
+                    <input type="text" name="emergency_contact" placeholder="Emergency Contact"
+                        value="{{ user.emergency_contact|default_if_none:'' }}">
+                </div>
+
+                <div class="profilepage-form-row">
+                    <input type="email" name="email" placeholder="Email" value="{{ user.email }}" required>
+                    <input type="text" name="username" placeholder="Username" value="{{ user.username }}" required>
+                </div>
+
+                <div class="profilepage-form-row">
+                    <input type="password" name="password1" placeholder="New Password (leave blank to keep current)">
+                    <input type="password" name="password2" placeholder="Confirm Password">
+                </div>
+
+                <button type="submit" class="profilepage-btn-submit">Save Changes</button>
+            </form>
+        </div>
+
+        <div id="ordered-items" class="profilepage-card" style="margin-top: 50px;">
+            <h2>Your Ordered Items</h2>
+            {% if orders %}
+            {% for order in orders %}
+            <div class="single-order">
+                <h3>Order #{{ order.id }} - {{ order.status }} - ${{ order.total_amount }}</h3>
+                <p>Ordered At: {{ order.created_at|date:"M d, Y H:i" }}</p>
+                <div class="order-products">
+                    {% for item in order.items.all %}
+                    <div class="order-item">
+                        <p><strong>Product:</strong> {{ item.product.name }}</p>
+                        <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                        <p><strong>Price:</strong> ${{ item.price }}</p>
+                        <hr>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>You have no orders yet.</p>
+            {% endif %}
+        </div>
+    </section>
+</section>
+
+<script>
+    document.getElementById('view-orders-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('ordered-items').scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+{% endblock %}

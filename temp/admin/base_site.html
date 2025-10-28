@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}MediTrust Administration{% endblock %}
+
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom_admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+  <h1 id="site-name">
+    <img src="/static/img/ChatGPT_Image_Sep_19__2025__12_54_25_PM__1_-removebg-preview.png" alt="">
+    <a href="{% url 'admin:index' %}">MediTrust Administration</a>
+  </h1>
+{% endblock %}

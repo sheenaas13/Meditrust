@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome To MediTrust{% endblock %}
+
+{% block content %}
+<section class="promo-section">
+    <h1 data-aos="fade-down" data-aos-duration="1200">
+        Find Medicines & Health Essentials in a Click!
+    </h1>
+    <form class="search-bar" action="{% url 'search_products' %}" method="GET">
+        <div class="search-container">
+            <input type="text" name="q" placeholder="Search medicines or services..." value="{{ request.GET.q }}"
+                required />
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </div>
+    </form>
+    <div class="options">
+        <div class="option" onclick="location.href='products/'">All Products</div>
+        <div class="option" onclick="location.href=''">Consultations</div>
+    </div>
+</section>
+
+<section class="sec2-features">
+    <div class="container">
+        <div class="feature-box">
+            <img src="/static/img/medicine.jpg" alt="Medicine">
+            <div class="feature-text">
+                <h3>Medicine</h3>
+                <p> Empowering your wellness with products and tips for a balanced, healthy life.</p>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <img src="/static/img/wellness.jpg" alt="Wellness">
+            <div class="feature-text">
+                <h3>Wellness</h3>
+                <p>Trusted medicines and treatments for you and your loved ones’ well-being.</p>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <img src="/static/img/daignostics.jpg" alt="Diagnostic">
+            <div class="feature-text">
+                <h3>Diagnostic</h3>
+                <p>Accurate diagnostics for timely insights and better health decisions.</p>
+            </div>
+        </div>
+
+        <div class="feature-box">
+            <img src="/static/img/health care.jpg" alt="Health Corner">
+            <div class="feature-text">
+                <h3>Health Corner</h3>
+                <p>Quality health care solutions you can trust, right at your fingertips.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="type-med">
+    {% for cat in categories %}
+    {% if cat.name == "Vitamins & Supplements" %}
+    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+        data-aos-duration="1200" style="background-image: url('/static/img/vitamins1.webp');">
+        <div class="overlay">
+            <h3>{{ cat.name }}</h3>
+            <button>→</button>
+        </div>
+    </a>
+    {% elif cat.name == "Pain Relief" %}
+    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+        data-aos-duration="1000" style="background-image: url('/static/img/painreliefs1.jpg');">
+        <div class="overlay">
+            <h3>{{ cat.name }}</h3>
+            <button>→</button>
+        </div>
+    </a>
+    {% elif cat.name == "Skin Care" %}
+    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+        data-aos-duration="800" style="background-image: url('/static/img/skincare1.jpg');">
+        <div class="overlay">
+            <h3>{{ cat.name }}</h3>
+            <button>→</button>
+        </div>
+    </a>
+    {% elif cat.name == "Fitness & Sports Nutrition" %}
+    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+        data-aos-duration="400" style="background-image: url('/static/img/supplements1.jpg');">
+        <div class="overlay">
+            <h3>{{ cat.name }}</h3>
+            <button>→</button>
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</section>
+
+
+<!-- 3rd Section: Promos -->
+<!-- <section class="sec3-promos">
+    <div class="container grid">
+        <div class="promo-box blue">
+            <h4>Medication at One Place</h4>
+            <a href="#">Shop Now</a>
+        </div>
+        <div class="promo-box pink">
+            <h4>Naturally Good</h4>
+            <a href="#">Shop Now</a>
+        </div>
+        <div class="promo-box green">
+            <h4>Medlife Products</h4>
+            <a href="#">Shop Now</a>
+        </div>
+        <div class="promo-box yellow">
+            <h4>Medicines Popularly</h4>
+            <a href="#">Shop Now</a>
+        </div>
+    </div>
+</section> -->
+
+<!-- 4th Section: Categories -->
+<section class="sec4-categories">
+    <div class="container">
+        <h2>Our Popular Categories</h2>
+
+        <!-- Container for content -->
+        <div id="categories-container">
+            <div class="grid">
+                {% for category in page_obj %}
+                <div class="cat-box">
+                    <a href="{% url 'product_list' %}?category={{ category.id }}">
+                        {% if category.image %}
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                        {% else %}
+                        <img src="/static/img/default-category.jpg" alt="{{ category.name }}">
+                        {% endif %}
+                        <p>{{ category.name }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="categories-pagination">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">« Prev</a>
+                {% else %}
+                <span class="page-btn disabled">« Prev</span>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="page-btn active">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="page-btn">Next »</a>
+                {% else %}
+                <span class="page-btn disabled">Next »</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="top-saver-section">
+    <div class="top-saver-header">
+        <h2>Today's Hot Deals</h2>
+        <a href="{% url 'product_list' %}?filter=hot_deals">View All</a>
+    </div>
+
+    <div class="top-saver-products-grid">
+        {% for product in hot_deals %}
+        <div class="top-saver-product-card">
+            {% if product.discount_percent %}
+            <span class="top-saver-discount-badge">{{ product.discount_percent }}% OFF</span>
+            {% endif %}
+
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+            <img src="/static/img/default-product.jpg" alt="{{ product.name }}">
+            {% endif %}
+
+            <div class="top-saver-product-info">
+                <h4>{{ product.name }}</h4>
+                <div>
+                    <span class="top-saver-price">₹{{ product.selling_price }}</span>
+                    {% if product.mrp %}
+                    <span class="top-saver-old-price">₹{{ product.mrp }}</span>
+                    {% endif %}
+                </div>
+                <div class="top-saver-stars">★★★★☆</div>
+                <a href="{% url 'product_detail' product.id %}" class="top-saver-btn ">View Product</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="banner-home1-section">
+    <div class="banner-home1-overlay"></div>
+    <div class="banner-home1-content">
+        <h3>Beauty &amp; Personal Care</h3>
+        <p>All trusted products – save up to 70% on your favorite beauty and personal care essentials.</p>
+        <a href="{% url 'product_listing' %}">Shop Now</a>
+    </div>
+</div>
+
+<section class="banner-home2-section">
+    <div class="banner-home2-card" style="background-image: url('/static/img/men1.jpg');">
+        <div class="banner-home2-content">
+            <h2>Men Care</h2>
+            <p>This is a short description for the first banner.</p>
+            <a href="{% url 'product_listing' %}">Learn More</a>
+        </div>
+    </div>
+
+    <div class="banner-home2-card" style="background-image: url('/static/img/female1.jpg');">
+        <div class="banner-home2-content">
+            <h2>Female Care</h2>
+            <p>This is a short description for the second banner.</p>
+            <a href="{% url 'product_listing' %}">Learn More</a>
+        </div>
+    </div>
+
+    <div class="banner-home2-card" style="background-image: url('/static/img/baby1.webp');">
+        <div class="banner-home2-content">
+            <h2>Baby Care</h2>
+            <p>This is a short description for the third banner.</p>
+            <a href="{% url 'product_listing' %}">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<div class="musthave-sectionname">
+    <div class="musthave-header">
+        <h2>Must Have Medicines</h2>
+        <a href="{% url 'product_list' %}?filter=must_haves">View All</a>
+    </div>
+
+    <div class="musthave-products-grid">
+        {% for product in must_haves %}
+        <div class="musthave-product-card">
+            {% if product.discount_percent %}
+            <span class="musthave-discount-badge">{{ product.discount_percent }}% OFF</span>
+            {% endif %}
+
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+            <img src="/static/img/default-product.jpg" alt="{{ product.name }}">
+            {% endif %}
+
+            <div class="musthave-product-info">
+                <h4>{{ product.name }}</h4>
+                <div>
+                    <span class="musthave-price">₹{{ product.selling_price }}</span>
+                    {% if product.mrp %}
+                    <span class="musthave-old-price">₹{{ product.mrp }}</span>
+                    {% endif %}
+                </div>
+                <div class="musthave-stars">★★★★☆</div>
+                <a href="{% url 'product_detail' product.id %}" class="top-saver-btn ">View Product</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="banner-home3-section">
+    <div class="banner-home3-overlay"></div>
+    <div class="banner-home3-content">
+        <h3>Pet Care</h3>
+        <p>Everything your furry friends need – shop trusted pet care products with savings up to 50%. Keep tails
+            wagging with top-quality food, grooming, and health essentials for your pets.</p>
+        <a href="{% url 'product_listing' %}">Shop Now</a>
+    </div>
+</div>
+
+<div class="petcare-sectionname">
+    <div class="petcare-header">
+        <h2>New Arrivals Here!</h2>
+        <a href="{% url 'product_list' %}?filter=new_arrivals">View All</a>
+    </div>
+
+    <div class="petcare-products-grid">
+        {% for product in new_arrivals %}
+        <a href="{% url 'product_detail' product.id %}" class="petcare-product-link">
+            <div class="petcare-product-card">
+                {% if product.discount_percent %}
+                <span class="petcare-discount-badge">{{ product.discount_percent }}% OFF</span>
+                {% endif %}
+
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+
+                <div class="petcare-product-info">
+                    <h4>{{ product.name }}</h4>
+                    <div>
+                        <span class="petcare-price">₹{{ product.selling_price }}</span>
+                        <span class="petcare-old-price">₹{{ product.mrp }}</span>
+                    </div>
+                    <div class="petcare-stars">★★★★☆</div>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p>No new arrivals available right now.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+<div class="Inminutes-sectionname">
+    <div class="Inminutes-header">
+        <h2>Medicines In Minutes</h2>
+        <a href="{% url 'product_list' %}?filter=come_in_minutes">View All</a>
+    </div>
+
+    <div class="Inminutes-products-grid">
+        {% for product in come_in_minutes %}
+        <div class="Inminutes-product-card">
+            {% if product.discount_percent %}
+            <span class="Inminutes-discount-badge">
+                {{ product.discount_percent }}% OFF
+            </span>
+            {% endif %}
+
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+
+            <div class="Inminutes-product-info">
+                <h4>{{ product.name }}</h4>
+                <div>
+                    <span class="Inminutes-price">₹{{ product.selling_price }}</span>
+                    <span class="Inminutes-old-price">₹{{ product.mrp }}</span>
+                </div>
+                <div class="Inminutes-stars">★★★★☆</div>
+                <a href="{% url 'product_detail' product.id %}" class="top-saver-btn ">View Product</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Medicines In Minutes available right now.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- <section class="about-home-section">
+    <div class="about-home-container">
+        <div class="about-home-row">
+            <div class="about-home-left-images">
+                <div class="about-home-image-box" data-aos="fade-down" data-aos-duration="1200">
+                    <img src="/static/img/doctor1.jfif" alt="Image 1">
+                </div>
+                <div class="about-home-image-box image2" data-aos="fade-up" data-aos-duration="1200">
+                    <img src="/static/img/Eles se comunicam com frequência e compartilham recursos quando necessário Foto de dois médicos fazendo anotações enquanto caminham em um hospital movimentado _ Foto Premium.jfif"
+                        alt="Image 2">
+                </div>
+            </div>
+            <div class="about-home-right-content">
+                <h2>Discover More Benefits</h2>
+                <p>
+                    <strong>1. Convenient Access to Prescribed Medicines</strong><br>
+                    With just a few clicks, patients can upload their prescriptions and order the exact medicines
+                    recommended by their doctor.
+                    This saves time and effort, especially for those who cannot easily visit a pharmacy in person.
+                </p>
+
+                <p>
+                    <strong>2. Doorstep Delivery with Speed</strong><br>
+                    Our service ensures that essential medicines reach patients quickly and safely, right at their
+                    doorstep.
+                    This is especially helpful in emergencies or for elderly patients who find it difficult to step out.
+                </p>
+
+                <p>
+                    <strong>3. Assured Quality and Authenticity</strong><br>
+                    Every medicine delivered is sourced from trusted pharmacies and verified suppliers, ensuring
+                    100% authenticity and compliance with safety standards. Customers can be confident about the quality
+                    of what they receive.
+                </p>
+                </p>
+
+                <a href="/another-page" class="about-home-btn">Learn More</a>
+            </div>
+
+        </div>
+    </div>
+</section> -->
+
+{% endblock %}

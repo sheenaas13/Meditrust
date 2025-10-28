@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - My Cart{% endblock %}
+
+{% block content %}
+
+<section class="cartpage-container">
+    <h1 class="cartpage-title">Shopping Cart</h1>
+
+    <div class="cartpage-section">
+        <div class="cartpage-items">
+
+            {% for item in cart_items %}
+            <div class="cartpage-item">
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                <div class="cartpage-details">
+                    <h3>{{ item.product.name }}</h3>
+                    <p>{{ item.product.description|truncatechars:60 }}</p>
+                </div>
+
+                <div class="cartpage-quantity">
+                    <form method="post" action="{% url 'update_cart_quantity' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" name="action" value="decrease">-</button>
+                        <span>{{ item.quantity }}</span>
+                        <button type="submit" name="action" value="increase">+</button>
+                    </form>
+                </div>
+
+                <div class="cartpage-price">₹{{ item.total_price }}</div>
+
+                <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                    {% csrf_token %}
+                    <button class="cartpage-delete">🗑️</button>
+                </form>
+            </div>
+            {% empty %}
+            <p>Your cart is empty, baby 💔</p>
+            {% endfor %}
+
+            {% if cart_items %}
+            <button class="cartpage-update-btn">Update Cart</button>
+            {% endif %}
+        </div>
+
+        <div class="cartpage-summary">
+            <h3>Order Summary</h3>
+            <div class="cartpage-voucher">
+                <input type="text" placeholder="Discount voucher">
+                <button>Apply</button>
+            </div>
+
+            <div class="cartpage-summary-item">
+                <p>Sub Total</p><span>₹{{ subtotal }}</span>
+            </div>
+            <div class="cartpage-summary-item">
+                <p>Discount ({{ discount_percent }}%)</p><span>-₹{{ discount }}</span>
+            </div>
+            <div class="cartpage-summary-item">
+                <p>Delivery fee</p><span>₹{{ delivery_fee }}</span>
+            </div>
+            <hr>
+            <div class="cartpage-summary-item cartpage-total">
+                <p>Total</p><span>₹{{ total }}</span>
+            </div>
+
+            <p class="cartpage-note">*90 Day Limited Warranty against manufacturer's defects</p>
+            <button class="cartpage-checkout-btn" onclick="window.location.href='checkout'">Checkout Now</button>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

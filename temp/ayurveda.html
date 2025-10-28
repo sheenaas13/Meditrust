@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Cancer Care{% endblock %}
+
+{% block content %}
+
+<section class="ayuveda-section1">
+    <div class="ayuveda-text">
+        <div class="consultdoc-kicker">Meditrust Pharmacy</div>
+        <h2 data-aos="fade-down" data-aos-duration="1200">Healing Through Ayurveda</h2>
+        <p>Discover the natural way to restore balance and harmony in your body, mind, and soul with our holistic
+            Ayurveda practices designed for modern lifestyles.</p>
+        <button class="ayuveda-btn">Learn More</button>
+    </div>
+
+    <!-- <div class="ayuveda-image">
+        <img src="https://images.unsplash.com/photo-1617191511861-3f2bde342a2b" alt="Ayurveda Healing">
+    </div> -->
+</section>
+
+<section class="ayuveda-reasons">
+    <div class="ayuveda-reason-box">
+        <div class="ayuveda-reason-header">
+            <i class="fas fa-leaf"></i>
+            <h3>Natural Healing</h3>
+        </div>
+        <p>Ayurveda emphasizes natural remedies and holistic practices that restore balance without harmful chemicals.
+        </p>
+    </div>
+
+    <div class="ayuveda-reason-box">
+        <div class="ayuveda-reason-header">
+            <i class="fas fa-spa"></i>
+            <h3>Mind-Body Balance</h3>
+        </div>
+        <p>It nurtures harmony between body and mind, reducing stress and enhancing overall wellness.</p>
+    </div>
+
+    <div class="ayuveda-reason-box">
+        <div class="ayuveda-reason-header">
+            <i class="fas fa-heartbeat"></i>
+            <h3>Long-Term Wellness</h3>
+        </div>
+        <p>Through preventive care and lifestyle guidance, Ayurveda promotes sustainable health and longevity.</p>
+    </div>
+</section>
+
+<section class="ayuveda-experience">
+    <div class="ayuveda-experience-image">
+        <img src="/static/img/ayurveda2.jpeg" alt="Ayurveda Experience">
+        <div class="ayuveda-years">25+<br>Years</div>
+    </div>
+
+    <div class="ayuveda-experience-text">
+        <h2>Restoring Balance for Generations</h2>
+        <p>With over two decades of expertise, we blend traditional Ayurveda knowledge with modern wellness practices to
+            bring you authentic and effective healing experiences.</p>
+        <div class="ayuveda-points">
+            <div class="ayuveda-point">
+                <div class="ayuveda-point-number">1</div>
+                <div class="ayuveda-point-text">Personalized treatments tailored to your unique body type.</div>
+            </div>
+            <div class="ayuveda-point">
+                <div class="ayuveda-point-number">2</div>
+                <div class="ayuveda-point-text">Natural remedies rooted in centuries-old traditions.</div>
+            </div>
+            <div class="ayuveda-point">
+                <div class="ayuveda-point-number">3</div>
+                <div class="ayuveda-point-text">Holistic approach balancing body, mind, and soul.</div>
+            </div>
+            <div class="ayuveda-point">
+                <div class="ayuveda-point-number">4</div>
+                <div class="ayuveda-point-text">Trusted by thousands for long-term wellness solutions.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ayuveda-bg-section">
+    <div class="ayuveda-bg-overlay"></div>
+    <div class="ayuveda-bg-content">
+        <h2>Discover the Power of Ayurveda</h2>
+        <p>Embrace natural healing traditions that bring balance, health, and harmony into your everyday life.</p>
+        <a href="#" class="ayuveda-btn">Shop Now</a>
+    </div>
+</section>
+
+<section class="ayuveda-counter-section">
+    <div class="ayuveda-counter-text">
+        <p>For decades, we’ve been dedicated to preserving the authentic traditions of Ayurveda while delivering trusted
+            care. Our experience speaks for itself in guiding people toward better health.</p>
+    </div>
+
+    <div class="ayuveda-counter-boxes">
+        <div class="ayuveda-counter-box">
+            <div class="ayuveda-counter-number" data-target="20">0</div>
+            <div class="ayuveda-counter-label">Years of Healing Expertise</div>
+        </div>
+        <div class="ayuveda-counter-box">
+            <div class="ayuveda-counter-number" data-target="15">0</div>
+            <div class="ayuveda-counter-label">Years of Research & Development</div>
+        </div>
+    </div>
+</section>
+
+<div class="ayuveda-meds-section">
+    <div class="ayuveda-meds-header">
+        <h2>Ayurvedic Medicines</h2>
+        <a href="{% url 'ayurveda' %}">View All</a>
+    </div>
+
+    <div class="ayuveda-products-grid">
+        {% for med in ayurvedic_meds %}
+        <div class="ayuveda-product-card">
+            {% if med.discount_percent %}
+            <span class="ayuveda-discount-badge">
+                {{ med.discount_percent }}% OFF
+            </span>
+            {% endif %}
+
+            <img src="{{ med.image.url }}" alt="{{ med.name }}">
+
+            <div class="ayuveda-product-info">
+                <h4>{{ med.name }}</h4>
+
+                <div>
+                    {% if med.is_available %}
+                    <span class="ayuveda-price">${{ med.selling_price }}</span>
+                    <span class="ayuveda-old-price">${{ med.mrp }}</span>
+                    {% else %}
+                    <span class="ayuveda-out-of-stock">Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                <div class="ayuveda-stars">★★★★☆</div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No ayurvedic medicines available right now.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<section class="ayuveda-categories-section">
+    <div class="container">
+        <h2>Search for More Categories</h2>
+        <div class="ayuveda-grid">
+            {% for category in categories %}
+            <div class="ayuveda-cat-box"
+                style="background-image: url('{% if category.image %}{{ category.image.url }}{% else %}/static/img/default-category.jpg{% endif %}');">
+                <div class="ayuveda-cat-overlay">
+                    <h3>{{ category.name }}</h3>
+                    <a href="" class="ayuveda-cat-btn">→</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No categories available right now.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

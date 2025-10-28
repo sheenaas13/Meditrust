@@ -1,0 +1,752 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Page Title{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <!-- Logo -->
+    <div class="header-logo">
+      <a href="{% url 'home' %}">
+        <img src="/static/img/logo.png" alt="Midiset Logo" />
+      </a>
+    </div>
+    <nav class="header-nav-links">
+      <ul>
+        <li>
+          <a href="#">Medicines
+            <i class="fas fa-caret-down arrow"></i>
+          </a>
+          <ul class="dropdown Med-dropdown">
+            {% for category in categories %}
+            <li>
+              <a href="{% url 'product_list' %}?category={{ category.id }}">
+                {{ category.name }}
+              </a>
+            </li>
+            {% empty %}
+            <li><a href="#">No categories available</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li>
+          <a href="{% url 'labtest' %}">Lab Test
+            <i class="fas fa-caret-down arrow"></i>
+          </a>
+          <ul class="Lab-dropdown dropdown">
+            {% for service in pharmacy_services %}
+            <li>
+              <a href=''>{{ service.name }}</a>
+            </li>
+            {% empty %}
+            <li><a href="#">No services available</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li>
+          <a href="{% url 'consultdoc' %}">Consult Doctors
+            <i class="fas fa-caret-down arrow"></i></a>
+          <ul class="dropdown">
+            <li><a href="#">Online</a></li>
+            <li><a href="#">In Clinic</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="{% url 'cancercare' %}">Cancer Care</a>
+        </li>
+        <li>
+          <a href="{% url 'ayurveda' %}">Ayurveda
+            <i class="fas fa-caret-down arrow"></i></a>
+          <ul class="dropdown">
+            <li><a href="{% url 'product_list' %}?category=27">Herbal Products</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="{% url 'partnership' %}">Partnership</a>
+        </li>
+        <li>
+          <a href="{% url 'careplan' %}">Care Plan</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Icons -->
+    <div class="header-icons">
+      <div class="user-dropdown">
+        <i class="fas fa-user"></i>
+        <ul class="user-menu">
+          {% if user.is_authenticated %}
+          <li>
+            <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="logout-btn">Logout</button>
+            </form>
+          </li>
+          <li><a href="{% url 'profile' %}">My Profile</a></li>
+          {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <a href="{% url 'wishlist' %}"><i class="fas fa-heart" title="Wishlist"></i></a>
+      <a href="{% url 'cart' %}"><i class="fas fa-shopping-cart" title="Cart"></i></a>
+      <i class="fas fa-location-dot" title="Location"></i>
+    </div>
+
+  </header>
+
+  <!-- Main content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="subscribe">
+      <div class="text">
+        <div>
+          <h4>Subscribe</h4>
+          <p>Get updates and latest offers. Stay connected with us.</p>
+        </div>
+      </div>
+
+      <div class="input">
+        <input type="email" placeholder="Write Email" aria-label="email" />
+        <button>→</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="col-brand">
+        <img src="/static/img/logo.png" alt="Company Logo" class="footer-logo" />
+
+        <p class="brand-content">
+          “MediTrust is a reliable healthcare platform <br> dedicated to providing easy access <br> to trusted medical
+          information
+          and services for <br> better well-being.”
+        </p>
+
+        <div class="social-row">
+          <div class="soc"><i class="fab fa-facebook-f"></i></div>
+          <div class="soc"><i class="fab fa-twitter"></i></div>
+          <div class="soc"><i class="fab fa-linkedin-in"></i></div>
+          <div class="soc"><i class="fab fa-instagram"></i></div>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="col">
+          <h5>About</h5>
+          <ul>
+            <li><a href="#">Planning</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">Consulting</a></li>
+            <li><a href="#">Analysis</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5>Menu</h5>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Service</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5>Services</h5>
+          <ul>
+            <li><a href="#">Logo</a></li>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Branding</a></li>
+            <li><a href="#">Marketing</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="tel:+012345678900">Call: +0123 456 789 00</a></li>
+            <li>
+              <a href="mailto:user@example.com">Email: user@example.com</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="right">
+        <iframe class="embed-map-frame" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+          src="https://maps.google.com/maps?width=600&height=400&hl=en&q=h-15%20noida%20sec-62&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="left">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Our History</a>
+        <a href="#">What We Do</a>
+      </div>
+      <div class="right">
+        © 2025 Example Text. All images are for demo purposes only.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const wishlistTable = document.getElementById('wishlist-table');
+      const wishlistProductCount = document.getElementById('wishlist-product-count');
+
+      if (!wishlistTable || !wishlistProductCount) return; // exit if elements not found
+
+      function updateWishlistProductCount() {
+        const count = wishlistTable.querySelectorAll('tbody tr').length;
+        wishlistProductCount.textContent = count + ' Product' + (count !== 1 ? 's' : '') + ' Added';
+      }
+
+      updateWishlistProductCount();
+
+      wishlistTable.addEventListener('click', (e) => {
+        const target = e.target;
+
+        // Handle quantity increase/decrease
+        if (target.classList.contains('wishlist-increase') || target.classList.contains('wishlist-decrease')) {
+          const quantitySpan = target.parentElement.querySelector('.wishlist-quantity');
+          let quantity = parseInt(quantitySpan.textContent);
+          const priceCell = target.closest('tr').querySelector('.wishlist-price');
+          const priceText = priceCell.textContent.replace(/[^\d.]/g, '');
+          const price = parseFloat(priceText);
+
+          if (target.classList.contains('wishlist-increase')) {
+            quantity++;
+          } else if (target.classList.contains('wishlist-decrease') && quantity > 1) {
+            quantity--;
+          }
+
+          quantitySpan.textContent = quantity;
+          const totalCell = target.closest('tr').querySelector('.wishlist-total');
+          totalCell.textContent = '₹' + (quantity * price).toFixed(2);
+        }
+
+        // Handle delete
+        if (target.classList.contains('wishlist-delete-btn')) {
+          const row = target.closest('tr');
+          const productId = row.dataset.productId;
+
+          fetch("{% url 'delete_wishlist_item' %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ product_id: productId })
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.deleted) {
+                row.remove();
+                updateWishlistProductCount();
+              } else {
+                alert("Failed to delete from wishlist.");
+              }
+            })
+            .catch(err => console.error("Error:", err));
+        }
+      });
+    });
+  </script>
+
+
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+
+  <script src="{% static 'script.js' %}"></script>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <button id="rzp-button">Pay Now</button>
+
+  <script>
+    var options = {
+      "key": "{{ RAZORPAY_KEY_ID }}", // from backend
+      "amount": "{{ order.amount }}", // in paise
+      "currency": "INR",
+      "name": "{{ service.name }}",
+      "description": "Booking payment",
+      "order_id": "{{ order.id }}",
+      "handler": function (response) {
+        alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        // redirect to success page
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button').onclick = function (e) {
+      rzp1.open();
+      e.preventDefault();
+    }
+  </script>
+
+  <script>
+    const bookedSlots = JSON.parse(document.getElementById('booked-slots').textContent);
+
+    const appointmentInput = document.getElementById('appointment_time');
+
+    appointmentInput.addEventListener('input', function () {
+      const selected = appointmentInput.value;
+      if (bookedSlots.includes(selected)) {
+        alert("This slot is already booked! Please choose another time.");
+        appointmentInput.value = '';
+      }
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar');
+      var bookedSlots = JSON.parse(document.getElementById('booked-slots').textContent);
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        slotMinTime: "08:00:00",
+        slotMaxTime: "18:00:00",
+        events: bookedSlots.map(slot => ({
+          title: 'Booked',
+          start: slot,
+          color: 'red'
+        })),
+        selectable: true,
+        select: function (info) {
+          const selected = info.startStr;
+          if (bookedSlots.includes(selected)) {
+            alert('This slot is already booked!');
+          } else {
+            document.getElementById('appointment_time').value = selected;
+          }
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <script>
+    document.querySelectorAll('.consultdoc-acc-item .consultdoc-acc-head').forEach(function (head) {
+      head.addEventListener('click', function () {
+        var body = head.nextElementSibling;
+        var toggle = head.querySelector('.consultdoc-acc-toggle');
+
+        // If this body is already active, close it
+        if (body.classList.contains('active')) {
+          body.classList.remove('active');
+          toggle.textContent = '+';
+        } else {
+          // Close all others
+          document.querySelectorAll('.consultdoc-acc-body').forEach(function (b) {
+            b.classList.remove('active');
+          });
+          document.querySelectorAll('.consultdoc-acc-toggle').forEach(function (t) {
+            t.textContent = '+';
+          });
+
+          // Open this one
+          body.classList.add('active');
+          toggle.textContent = '-';
+        }
+      });
+    });
+  </script>
+
+  <script>
+    const carouselWrapper = document.querySelector('.consultdoc-carousel-wrapper');
+    const cards = document.querySelectorAll('.consultdoc-testimonial-card');
+    const prevBtn = document.querySelector('.consultdoc-prev');
+    const nextBtn = document.querySelector('.consultdoc-next');
+    const dotsContainer = document.querySelector('.consultdoc-dots-container');
+    let currentIndex = 0;
+
+
+    cards.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.classList.add('consultdoc-dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+
+
+    const dots = document.querySelectorAll('.consultdoc-dot');
+
+
+    function updateCarousel() {
+      cards.forEach((card, i) => {
+        card.classList.remove('active');
+        dots[i].classList.remove('active');
+        if (i === currentIndex) {
+          card.classList.add('active');
+          dots[i].classList.add('active');
+        }
+      });
+      carouselWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+
+    function goToSlide(index) {
+      currentIndex = index;
+      updateCarousel();
+    }
+
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % cards.length;
+      updateCarousel();
+    });
+
+
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+      updateCarousel();
+    });
+
+
+    setInterval(() => {
+      nextBtn.click();
+    }, 4000);
+  </script>
+
+  <script>
+    (function () {
+      const tabButtons = document.querySelectorAll('.cancercare-option');
+      const tabContents = document.querySelectorAll('.cancercare-detail');
+
+      function setActiveTab(targetId) {
+        // Show the selected tab, hide the others
+        tabContents.forEach(content => {
+          if (content.id === targetId) {
+            content.classList.add('active-tab');  // show
+          } else {
+            content.classList.remove('active-tab');  // hide
+          }
+        });
+
+        // Highlight the clicked button
+        tabButtons.forEach(btn => {
+          const btnTarget = btn.getAttribute('data-target');
+          if (btnTarget === targetId) {
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+          } else {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+          }
+        });
+      }
+
+      // Add click event for all buttons
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-target');
+          setActiveTab(targetId);
+        });
+      });
+
+      // Initialize first tab as active
+      setActiveTab('chemo');
+    })();
+  </script>
+
+
+  <script>
+    const ayuvedaCounters = document.querySelectorAll('.ayuveda-counter-number');
+    const ayuvedaSpeed = 200;
+
+    const animateAyuvedaCounters = () => {
+      ayuvedaCounters.forEach(counter => {
+        const updateAyuvedaCount = () => {
+          const target = +counter.getAttribute('data-target');
+          const count = +counter.innerText.replace("+", "");
+          const increment = target / ayuvedaSpeed;
+
+          if (count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(updateAyuvedaCount, 20);
+          } else {
+            counter.innerText = target + "+";
+          }
+        };
+        updateAyuvedaCount();
+      });
+    };
+
+    const ayuvedaObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateAyuvedaCounters();
+          ayuvedaObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    ayuvedaObserver.observe(document.querySelector('.ayuveda-counter-section'));
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("successModal");
+      const modalMessage = document.getElementById("modalMessage");
+      const closeBtn = document.getElementById("closeModal");
+      const messageData = document.getElementById("messageData").dataset.message;
+
+      closeBtn.onclick = () => modal.style.display = "none";
+
+      if (messageData && messageData !== "") {
+        modalMessage.textContent = messageData;
+        modal.style.display = "flex";
+
+        // Auto-close after 3 seconds
+        setTimeout(() => modal.style.display = "none", 3000);
+      }
+    });
+  </script>
+
+  <script>
+    function toggleWishlist(element) {
+      const productId = element.dataset.productId;
+
+      fetch("{% url 'toggle_wishlist' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ product_id: productId })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.added) {
+            element.classList.add("saved");
+          } else {
+            element.classList.remove("saved");
+          }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $(document).on('click', '#categories-pagination a', function (e) {
+        e.preventDefault(); // prevent full reload
+        var url = $(this).attr('href');
+
+        $.ajax({
+          url: url,
+          type: 'get',
+          dataType: 'html',
+          success: function (data) {
+            // Replace the categories grid and pagination
+            var newContent = $(data).find('#categories-container').html();
+            $('#categories-container').html(newContent);
+          }
+        });
+      });
+    });
+  </script>
+
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    function addToCart(element) {
+      const productId = element.dataset.productId;
+      const csrftoken = getCookie('csrftoken');
+
+      fetch("{% url 'add_to_cart' %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': csrftoken
+        },
+        body: `product_id=${productId}`
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'added') {
+            alert('Product added to cart 💖');
+          } else if (data.status === 'quantity_updated') {
+            alert(`Product quantity updated: ${data.quantity}`);
+          } else {
+            alert('Something went wrong!');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error adding product to cart!');
+        });
+    }
+  </script>
+
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const addButtons = document.querySelectorAll('.wishlist-add-button');
+
+      addButtons.forEach(button => {
+        button.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const productId = button.dataset.productId;
+          const csrftoken = getCookie('csrftoken');
+
+          try {
+            const response = await fetch("{% url 'add_to_cart' %}", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrftoken
+              },
+              body: `product_id=${productId}`
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'added') {
+              alert('Product added to cart 💖');
+              button.textContent = 'Added';
+              button.disabled = true; // Prevent double clicks
+            } else if (data.status === 'quantity_updated') {
+              alert(`Product quantity updated: ${data.quantity}`);
+            } else {
+              alert('Something went wrong!');
+            }
+
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error adding product to cart!');
+          }
+        });
+      });
+    });
+  </script>
+
+  <script>
+    document.querySelectorAll('.product_detail-tab-headers div').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.product_detail-tab-headers div').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  </script>
+
+  <script>
+    // Wait for the page to load
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get main image element
+      const mainImage = document.querySelector('.product_detail-main-image img');
+
+      // Get all thumbnails
+      const thumbnails = document.querySelectorAll('.product_detail-thumbnails img');
+
+      // Loop through thumbnails and add click event
+      thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', function () {
+          // Change main image src to clicked thumbnail src
+          mainImage.src = this.src;
+
+          // Optional: Add active border style
+          thumbnails.forEach(img => img.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const bars = document.querySelectorAll('.rating-bar');
+      bars.forEach(bar => {
+        const percent = bar.getAttribute('data-percent');
+        const fill = bar.querySelector('.rating-fill');
+        fill.style.width = percent + '%';
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <script>
+    // Example of booked dates you can fetch dynamically from backend later
+    const bookedDates = [
+      "2025-10-30",
+      "2025-11-02",
+      "2025-11-04"
+    ];
+
+    // Initialize Flatpickr Calendar
+    flatpickr("#appointment_date", {
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      disable: bookedDates,
+      altInput: true,
+      altFormat: "F j, Y",
+      defaultDate: null,
+      allowInput: false,
+      onReady: function (selectedDates, dateStr, instance) {
+        // Add a small tooltip for disabled (booked) dates
+        instance.calendarContainer.classList.add('flatpickr-theme');
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</body>
+
+</html>

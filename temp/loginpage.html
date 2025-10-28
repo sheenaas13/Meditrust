@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Cancer Care{% endblock %}
+
+{% block content %}
+
+<section class="login-section">
+    <div class="login-container">
+        <div class="login-content" data-aos="fade-right" data-aos-duration="1200">
+            {% if user.is_authenticated %}
+            <h2>
+                <i class="fa-solid fa-stethoscope" style="margin-right: 10px;"></i>
+                Welcome, {{ user.username }}
+            </h2>
+            <p>You are already logged in.</p>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="login-btn">Logout</button>                
+            </form>
+            <button onclick="window.location.href='home'" class="btn-home">Go To HomePage</button>
+
+            {% else %}
+            <h2>
+                <i class="fa-solid fa-stethoscope" style="margin-right: 10px;"></i>
+                Login
+            </h2>
+            <p>Welcome Back! Please login to your account.</p>
+            <form method="POST" action="">
+                {% csrf_token %}
+
+                <div class="login-form-group login-input-icon">
+                    <input type="text" name="username" placeholder="Username or Email" required>
+                    <span class="login-icon"><i class="fa-solid fa-user"></i></span>
+                </div>
+
+                <div class="login-form-group login-input-icon">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <span class="login-icon"><i class="fa-solid fa-key"></i></span>
+                </div>
+
+                <div class="login-extra">
+                    <label>
+                        <input type="checkbox" name="remember"> Remember me
+                    </label>
+                    <a href="" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+
+                <p class="signup-link">New user? <a href="{% url 'signup' %}">Sign up</a></p>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div id="messageData" data-message="{% if messages %}{{ messages.0 }}{% endif %}"></div>
+
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-icon">✔️</span>
+        <p id="modalMessage"></p>
+        <button id="closeModal">OK</button>
+    </div>
+</div>
+
+{% endblock %}

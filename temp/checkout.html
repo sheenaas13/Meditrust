@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}MediTrust - Checkout{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <div class="checkout-form">
+        <h2 class="checkout-title">Checkout</h2>
+
+        <!-- Contact Info -->
+        <div class="checkout-section">
+            <h3>1. Contact Information</h3>
+            <div class="checkout-input-group">
+                <input type="text" class="checkout-input" value="{{ user.first_name }}" placeholder="First Name">
+                <input type="text" class="checkout-input" value="{{ user.last_name }}" placeholder="Last Name">
+            </div>
+            <div class="checkout-input-group">
+                <input type="text" class="checkout-input" value="{{ user.contact_no }}" placeholder="Phone">
+                <input type="email" class="checkout-input" value="{{ user.email }}" placeholder="Email">
+            </div>
+        </div>
+
+        <!-- Delivery -->
+        <div class="checkout-section">
+            <h3>2. Delivery Method</h3>
+            <div class="checkout-delivery-options">
+                <div class="checkout-option">Store</div>
+                <div class="checkout-option checkout-active">Delivery</div>
+            </div>
+            <div class="checkout-input-group">
+                <select class="checkout-select">
+                    <option selected>{{ user.state }}</option>
+                    <option>New Jersey</option>
+                    <option>California</option>
+                </select>
+                <input type="text" class="checkout-input" value="{{ user.street_address }}" placeholder="Address">
+                <input type="text" class="checkout-input" value="{{ user.zip_code }}" placeholder="ZIP Code">
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="checkout-section">
+            <h3>3. Payment Method</h3>
+            <div class="checkout-payment-methods">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/Google_Pay_Logo.svg" alt="GPay">
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="checkout-order-summary">
+        {% for item in cart_items %}
+        <div class="checkout-product">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+            <h4>{{ item.product.name }}</h4>
+            <div class="checkout-order-details">
+                <p>Qty: {{ item.quantity }}</p>
+                <p>Price: ₹{{ item.product.selling_price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="checkout-price-breakdown">
+            <div><span>Subtotal</span><span>₹{{ subtotal }}</span></div>
+            <div><span>Discount</span><span>-₹{{ discount }}</span></div>
+            <div><span>Shipping</span><span>Free</span></div>
+            <div class="checkout-total"><span>Total</span><span>₹{{ total }}</span></div>
+        </div>
+
+        <button id="rzp-button1" class="checkout-btn">Pay Now</button>
+        <p class="checkout-agreement">By confirming the order, I accept the terms of the user agreement.</p>
+    </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ razorpay_key }}",
+        "amount": "{{ total|floatformat:2|add:'0' }}00",
+        "currency": "INR",
+        "name": "MediTrust",
+        "description": "Order Payment",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response) {
+            window.location.href = "{% url 'payment_success' %}";
+        },
+        "prefill": {
+            "name": "{{ user.first_name }} {{ user.last_name }}",
+            "email": "{{ user.email }}",
+            "contact": "{{ user.contact_no }}"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock %}

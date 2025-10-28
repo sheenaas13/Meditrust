@@ -1,0 +1,10 @@
+<h2>Booking Confirmed 🎉</h2>
+<p>Hi {{ booking.name }}, your booking for <strong>{{ booking.service.name }}</strong> is confirmed.</p>
+<p>Test Type: {{ booking.test_type }}</p>
+<p>Appointment: {{ booking.appointment_time|date:"Y-m-d H:i" }}</p>
+<p>Doctor: {{ booking.doctor_name }}</p>
+<p>Address: {{ booking.address }}</p>
+<p>Payment Status: {{ booking.payment_status }}</p>
+<p>Amount Paid: ₹{{ booking.price }}</p>
+
+<a href="{% url 'labtest' %}">Back to Services</a>

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Medicines{% endblock %}
+
+{% block content %}
+
+<div class="wishlist-container">
+    <div class="wishlist-header">
+        <h2>My Wishlist</h2>
+        <span id="wishlist-product-count">0 Products Added</span>
+    </div>
+
+    <table id="wishlist-table" class="wishlist-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Add to Cart</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in wishlist_products %}
+            <tr data-product-id="{{ product.id }}">
+                <td>{{ product.name }}</td>
+                <td><img src="{{ product.image.url }}" alt="{{ product.name }}"></td>
+                <td class="wishlist-price">₹{{ product.selling_price }}</td>
+                <td>
+                    <div class="wishlist-quantity-control">
+                        <button class="wishlist-decrease">-</button>
+                        <span class="wishlist-quantity">1</span>
+                        <button class="wishlist-increase">+</button>
+                    </div>
+                </td>
+                <td class="wishlist-total">₹{{ product.selling_price }}</td>
+                <td><button class="wishlist-add-button" data-product-id="{{ product.id }}">Add</button></td>
+                <td><button class="wishlist-delete-btn">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="wishlist-action-btns">
+        <button id="add-all-to-cart">Add All to Bag</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const wishlistTable = document.getElementById('wishlist-table');
+        const wishlistProductCount = document.getElementById('wishlist-product-count');
+
+        function updateWishlistProductCount() {
+            const count = wishlistTable.querySelectorAll('tbody tr').length;
+            wishlistProductCount.textContent = count + ' Product' + (count !== 1 ? 's' : '') + ' Added';
+        }
+
+        updateWishlistProductCount();
+
+        wishlistTable.addEventListener('click', (e) => {
+            const target = e.target;
+            const row = target.closest('tr');
+            if (!row) return;
+
+            const productId = row.dataset.productId;
+
+            if (target.classList.contains('wishlist-increase')) {
+                const qtySpan = row.querySelector('.wishlist-quantity');
+                let qty = parseInt(qtySpan.textContent);
+                qty++;
+                qtySpan.textContent = qty;
+
+                const price = parseFloat(row.querySelector('.wishlist-price').textContent.replace(/[^\d.]/g, ''));
+                row.querySelector('.wishlist-total').textContent = '₹' + (price * qty).toFixed(2);
+            }
+
+            if (target.classList.contains('wishlist-decrease')) {
+                const qtySpan = row.querySelector('.wishlist-quantity');
+                let qty = parseInt(qtySpan.textContent);
+                if (qty > 1) qty--;
+                qtySpan.textContent = qty;
+
+                const price = parseFloat(row.querySelector('.wishlist-price').textContent.replace(/[^\d.]/g, ''));
+                row.querySelector('.wishlist-total').textContent = '₹' + (price * qty).toFixed(2);
+            }
+
+            if (target.classList.contains('wishlist-delete-btn')) {
+                fetch("{% url 'delete_wishlist_item' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.deleted) {
+                            row.remove();
+                            updateWishlistProductCount();
+                        } else {
+                            alert(data.error || "Failed to delete from wishlist.");
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+            }
+        });
+    });
+</script>
+
+{% endblock %}

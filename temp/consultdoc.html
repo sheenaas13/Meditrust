@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Consultations{% endblock %}
+
+{% block content %}
+
+<section class="consultdoc-banner">
+    <div class="consultdoc-banner-overlay">
+        <div class="consultdoc-banner-content">
+            <div class="consultdoc-kicker">Meditrust Pharmacy</div>
+            <h2 data-aos="fade-down" data-aos-duration="1200">Your Health, Our Priority</h2>
+            <p>
+                We provide trusted healthcare services and screenings designed to keep you and your loved ones safe.
+                Visit us today for quick consultations, reliable tests, and compassionate support.
+            </p>
+            <a href="#" class="consultdoc-btn-primary">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<div class="consultdoc-container">
+    <div class="consultdoc-services">
+        <div class="consultdoc-service-card">
+            <div class="consultdoc-service-icon"><i class="fas fa-heartbeat"></i></div>
+            <div class="consultdoc-service-body">
+                <h4>Blood Pressure Check</h4>
+                <p>Quick, non-invasive measurement to identify hypertension risk.</p>
+            </div>
+        </div>
+
+        <div class="consultdoc-service-card">
+            <div class="consultdoc-service-icon"><i class="fas fa-tint"></i></div>
+            <div class="consultdoc-service-body">
+                <h4>Blood Glucose Test</h4>
+                <p>Finger-prick screening to detect or monitor diabetes with instant, actionable results.</p>
+            </div>
+        </div>
+
+        <div class="consultdoc-service-card">
+            <div class="consultdoc-service-icon"><i class="fas fa-vials"></i></div>
+            <div class="consultdoc-service-body">
+                <h4>Cholesterol Panel</h4>
+                <p>Assess lipid levels (HDL, LDL, triglycerides) to evaluate cardiovascular risk.</p>
+            </div>
+        </div>
+
+        <div class="consultdoc-service-card">
+            <div class="consultdoc-service-icon"><i class="fas fa-weight"></i></div>
+            <div class="consultdoc-service-body">
+                <h4>BMI & Weight Check</h4>
+                <p>Measure and track body composition to support healthy lifestyle planning.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="consultdoc-hero">
+        <div class="consultdoc-hero-media">
+            <video controls>
+                <source src="{{ MEDIA_URL }}videos/istockphoto-1447390285-640_adpp_is.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <!-- <div class="consultdoc-play-btn" id="playBtn">▶</div> -->
+        </div>
+
+        <div class="consultdoc-hero-text">
+            <h2>Our Story</h2>
+            <p>We’re a dedicated team of healthcare professionals committed to delivering convenient, high-quality
+                screening and consultation services right where you need them. Our pharmacy-based diagnostics help
+                you catch issues early and make better health choices without the long wait.</p>
+            <br>
+            <p>
+                Together, we combine expertise, compassion, and innovation to ensure every patient feels supported and
+                cared for. From routine health checks to specialized consultations, our mission is to make healthcare
+                more accessible, personalized, and stress-free—so you can focus on living a healthier, happier life.
+            </p>
+            <a class="consultdoc-btn-primary" href="#">Read More</a>
+        </div>
+    </section>
+
+    <div class="consultdoc-stats">
+        <div class="consultdoc-stat">
+            <h3>200+</h3>
+            <p>Doctors</p>
+        </div>
+        <div class="consultdoc-stat">
+            <h3>65+</h3>
+            <p>Specialists</p>
+        </div>
+        <div class="consultdoc-stat">
+            <h3>800+</h3>
+            <p>Vaccinated</p>
+        </div>
+        <div class="consultdoc-stat">
+            <h3>35+</h3>
+            <p>Years of service</p>
+        </div>
+    </div>
+
+    <section class="consultdoc-team">
+        <h3>Meet Our Consultants & Medical Specialists</h3>
+        <p>Meet our dedicated consultants and medical specialists, each bringing years of expertise and compassionate
+            care. They work together to ensure every patient receives personalized attention and the highest standard of
+            treatment.</p>
+        <div class="consultdoc-team-grid">
+            {% for doctor in doctor %}
+            <div class="consultdoc-doc-card">
+                <div class="consultdoc-doc-photo">
+                    <img src="{{ doctor.image.url }}" alt="{{ doctor.name }}" />
+                </div>
+                <div class="consultdoc-overlay">
+                    <div class="consultdoc-doc-name">{{ doctor.name }}</div>
+                    <div class="consultdoc-doc-title">{{ doctor.specialty }}</div>
+                    <div class="consultdoc-socials">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <section class="consultdoc-faq">
+        <h4>Frequently Asked Questions</h4>
+        <p>Have questions? We've got answers. Our Frequently Asked Questions section is designed to help you find quick
+            and clear information about our services, treatments, and processes. Whether you're curious about
+            appointments, consultations, or specialized care, you'll find guidance to make your experience smooth and
+            stress-free.</p>
+        <div class="consultdoc-accordion" id="accordion">
+            <div class="consultdoc-acc-item">
+                <div class="consultdoc-acc-head">
+                    <h5>Do I need an appointment?</h5>
+                    <div class="consultdoc-acc-toggle">+</div>
+                </div>
+                <div class="consultdoc-acc-body">Most basic screenings are available on a walk-in basis. For
+                    specialized tests (like comprehensive blood panels) we recommend booking an appointment to
+                    ensure availability and privacy.</div>
+            </div>
+
+            <div class="consultdoc-acc-item">
+                <div class="consultdoc-acc-head">
+                    <h5>How long will results take?</h5>
+                    <div class="consultdoc-acc-toggle">+</div>
+                </div>
+                <div class="consultdoc-acc-body">Point-of-care tests such as blood glucose or rapid flu tests often
+                    provide results within minutes. Tests sent to a lab (e.g., some PCR tests) may take 24–72 hours
+                    depending on the service selected.</div>
+            </div>
+
+            <div class="consultdoc-acc-item">
+                <div class="consultdoc-acc-head">
+                    <h5>Is the testing confidential?</h5>
+                    <div class="consultdoc-acc-toggle">+</div>
+                </div>
+                <div class="consultdoc-acc-body">Yes. We follow privacy standards and only share results with the
+                    patient unless explicit consent is given to release information to others or to your physician.
+                </div>
+            </div>
+
+            <div class="consultdoc-acc-item">
+                <div class="consultdoc-acc-head">
+                    <h5>How long does the consultation process take?</h5>
+                    <div class="consultdoc-acc-toggle">+</div>
+                </div>
+                <div class="consultdoc-acc-body">Most consultations take between 15 to 30 minutes depending on the
+                    complexity of your concern. Our team ensures you get detailed attention without unnecessary delays.
+                </div>
+            </div>
+
+            <div class="consultdoc-acc-item">
+                <div class="consultdoc-acc-head">
+                    <h5>Can I book an appointment online?</h5>
+                    <div class="consultdoc-acc-toggle">+</div>
+                </div>
+                <div class="consultdoc-acc-body">Yes, you can easily schedule appointments online through our platform.
+                    Simply choose your preferred date and time, and you’ll receive an instant confirmation.
+                </div>
+            </div>
+
+            <div class="consultdoc-acc-item">
+                <div class="consultdoc-acc-head">
+                    <h5>Are your services available 24/7?</h5>
+                    <div class="consultdoc-acc-toggle">+</div>
+                </div>
+                <div class="consultdoc-acc-body">We provide round-the-clock support for urgent queries and have flexible
+                    slots for regular consultations. This ensures you can reach us anytime you need guidance.
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div id="modal" class="consultdoc-modal">
+    <div class="consultdoc-modal-content">
+        <button id="modalClose" class="consultdoc-modal-close">Close</button>
+        <div class="consultdoc-video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                allowfullscreen></iframe></div>
+    </div>
+</div>
+
+{% endblock %}

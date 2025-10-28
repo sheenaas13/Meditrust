@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - LabTest{% endblock %}
+
+{% block content %}
+<section class="lab-test-hero" aria-label="Meditrust Pharmacy hero">
+    <div>
+        <div class="lab-test-kicker">Meditrust Pharmacy</div>
+        <h1 data-aos="fade-down" data-aos-duration="1200">Trusted Pharmacy Care — Medication, Advice & Health Delivered
+        </h1>
+        <p class="lab-test-lead">Meditrust Pharmacy blends professional pharmacy services with compassionate
+            care. We provide fast prescription fulfilment.</p>
+        <div class="lab-test-cta-row">
+            <a class="lab-test-btn lab-test-btn-primary" href="#services">Get Started</a>
+            <a class="lab-test-btn lab-test-btn-outline" href="#about">Learn More</a>
+        </div>
+    </div>
+
+    <div class="lab-test-hero-visual">
+        <!-- <div class="lab-test-pill-image" aria-hidden="true">
+                <img src="https://images.unsplash.com/photo-1580281657521-9426cf0b2f01?w=1200&q=80&auto=format&fit=crop&s=medpharm"
+                    alt="Pharmacist helping a customer">
+            </div> -->
+        <!-- <div class="lab-test-decor-top">
+            <img src="" alt="">
+        </div> -->
+        <!-- <div class="lab-test-decor-small">
+            <img src="/static/img/doctor image in hexagon.webp" alt="">
+        </div> -->
+    </div>
+</section>
+
+<div class="lab-test-container">
+
+    <section id="services" class="lab-test-section">
+        <div class="lab-test-section-title">
+            <h2>Connecting Care & Medicine For Years</h2>
+            <p>
+                Comprehensive pharmacy services tailored for patients, clinics, and community programs — medication
+                dispensing, consultations, vaccinations and more.
+            </p>
+        </div>
+
+        <div class="lab-test-services" role="list">
+            <div class="lab-test-service" role="listitem">
+                <div class="lab-test-icon">💊</div>
+                <h3>Prescription Fulfilment</h3>
+                <p>Fast, accurate processing with secure packaging and delivery options.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">🩺</div>
+                <h3>Clinical Consultations</h3>
+                <p>One-on-one pharmacist consultations for safe medication use and interactions.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">💉</div>
+                <h3>Vaccinations & Immunisations</h3>
+                <p>Seasonal and travel vaccines administered by trained staff.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">📦</div>
+                <h3>Home Delivery</h3>
+                <p>Reliable doorstep delivery for maintenance and acute medications.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">🧾</div>
+                <h3>Medication Reviews</h3>
+                <p>Annual medication therapy reviews to optimise treatment outcomes.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">🏥</div>
+                <h3>Clinic Partnerships</h3>
+                <p>Integrated support for local clinics and chronic disease programs.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">🛒</div>
+                <h3>Health & Wellness Store</h3>
+                <p>Curated OTC products, supplements and medical supplies.</p>
+                <a href="#">Learn More →</a>
+            </div>
+
+            <div class="lab-test-service">
+                <div class="lab-test-icon">📞</div>
+                <h3>24/7 Support Line</h3>
+                <p>Pharmacist advice and order assistance available around the clock.</p>
+                <a href="#">Learn More →</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="lab-test-about">
+        <div>
+            <h3>A New Partner For Your Health</h3>
+            <p>Meditrust Pharmacy has served the local community with professional pharmaceutical care for over a
+                decade. Our team is made up of licensed pharmacists and trained healthcare staff who prioritise
+                safety, clarity and personalised care.</p>
+
+            <p style="margin-top:12px;color:var(--muted)">We believe in patient education, accessible services, and
+                strong clinical collaboration. Whether you need help managing multiple medications, arranging a
+                seasonal vaccine, or getting a reliable home delivery — we’re here to help.</p>
+
+            <ul class="lab-test-about-list">
+                <li>Licensed pharmacists and certified technicians.</li>
+                <li>Secure prescription management & digital records.</li>
+                <li>Flexible delivery & pickup options.</li>
+                <li>Community health outreach and screening events.</li>
+            </ul>
+
+            <a class="lab-test-btn lab-test-btn-primary" href="#" style="margin-top:14px;display:inline-block">Visit
+                Our Store</a>
+        </div>
+
+        <div>
+            <div class="lab-test-about-image">
+                <img src="/static/img/pharmacyteam.jpg" alt="Pharmacy team">
+            </div>
+        </div>
+    </section>
+
+    <section class="lab-test-portfolio" aria-label="Meditrust services">
+        <div class="portfolio-header">
+            <h3>A New Way To Health</h3>
+            <p>Our service portfolio blends modern pharmacy practice with patient-centred programs to improve adherence
+                and keep families healthy.</p>
+        </div>
+
+        <div class="lab-test-portfolio-grid">
+            {% for service in services %}
+            <div class="lab-test-feature">
+                <div class="lab-test-feat-img">
+                    <img src="{{ service.image.url }}" alt="{{ service.name }}">
+                </div>
+                <h4>{{ service.name }}</h4>
+                <p>{{ service.description|truncatewords:20 }}</p>
+
+                {% if service.is_available %}
+                <a href="{{ service.get_absolute_url }}" class="btn-book">Book Now - ₹{{ service.price }}</a>
+                {% else %}
+                <span class="unavailable">Currently Unavailable</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

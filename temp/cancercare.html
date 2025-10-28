@@ -1,0 +1,443 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Cancer Care{% endblock %}
+
+{% block content %}
+
+<!-- BANNER -->
+<section class="cancercare-banner">
+    <div class="cancercare-banner-overlay">
+        <div class="cancercare-banner-content">
+            <div class="cancercare-kicker">Meditrust Cancer Care</div>
+            <h2 data-aos="fade-down" data-aos-duration="1200">
+                Compassionate Cancer Care, Every Step of the Way
+            </h2>
+            <p>
+                Our dedicated team of specialists provides advanced treatments, emotional support,
+                and holistic care tailored to each patient’s journey. You are never alone in your fight.
+            </p>
+            <a href="#" class="cancercare-btn-primary">Book an Appointment</a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="cancercare-about">
+    <div class="cancercare-about-container">
+        <div class="cancercare-about-text" data-aos="fade-right" data-aos-duration="1200">
+            <h2>How Our Cancer Care Programme Helps</h2>
+            <p>
+                At Meditrust, we believe cancer care should go beyond treatment.
+                Our programme is built on compassion, warmth, and trust, ensuring that every patient
+                receives not only the best medical expertise but also the emotional and holistic support
+                they deserve. With advanced medicines, personalized therapies, and a caring team, we walk
+                with you at every step of your journey.
+            </p>
+            <a href="#" class="cancercare-about-btn-primary">Learn More</a>
+        </div>
+        <div class="cancercare-about-image" data-aos="fade-left" data-aos-duration="1200">
+            <img src="/static/img/cancercare2.jpg" alt="Cancer Care Support">
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES / TABS -->
+<section class="cancercare-services" aria-label="Cancer care services">
+    <div class="cancercare-inner">
+
+        <!-- HEADER -->
+        <div class="cancercare-header">
+            <h2>What We Offer — Compassion, Expertise & Hope</h2>
+            <p>
+                At Meditrust Cancer Care we combine cutting-edge medicine with heartfelt support. Our multidisciplinary
+                teams craft personalized plans, ensuring every patient receives advanced therapies, emotional care, and
+                practical guidance.
+            </p>
+        </div>
+
+        <!-- TABS -->
+        <div class="cancercare-options" role="tablist" aria-label="Cancer care options">
+            <button class="cancercare-option active" data-target="chemo" role="tab" aria-selected="true">
+                <i class="fa-solid fa-syringe"></i><span>Chemotherapy</span>
+            </button>
+            <button class="cancercare-option" data-target="radiation" role="tab" aria-selected="false">
+                <i class="fa-solid fa-radiation"></i><span>Radiation</span>
+            </button>
+            <button class="cancercare-option" data-target="immuno" role="tab" aria-selected="false">
+                <i class="fa-solid fa-shield-virus"></i><span>Immunotherapy</span>
+            </button>
+            <button class="cancercare-option" data-target="supportive" role="tab" aria-selected="false">
+                <i class="fa-solid fa-hand-holding-heart"></i><span>Supportive Care</span>
+            </button>
+            <button class="cancercare-option" data-target="screening" role="tab" aria-selected="false">
+                <i class="fas fa-search"></i><span>Early Screening</span>
+            </button>
+            <button class="cancercare-option" data-target="rehab" role="tab" aria-selected="false">
+                <i class="fas fa-heartbeat"></i><span>Rehabilitation</span>
+            </button>
+        </div>
+
+        <!-- TAB CONTENT -->
+        <div class="cancercare-details">
+
+            <!-- CHEMO -->
+            <div id="chemo" class="cancercare-detail active-tab" role="tabpanel">
+                <h3>Chemotherapy <span>: Personalized & Compassionate</span></h3>
+                <p>
+                    Chemotherapy at Meditrust is tailored to the individual. We design dosing schedules and supportive
+                    medications that aim to control disease while keeping side effects manageable. Our infusion suites
+                    are comfortable and staffed by oncology nurses trained to provide both clinical care and emotional
+                    reassurance. Beyond the drug protocols, we offer counseling, nutrition planning, and symptom
+                    management to help patients maintain strength and quality of life. Families are included in
+                    discussions
+                    so everyone feels informed and supported throughout treatment.
+                </p>
+
+                <ul class="cancercare-points">
+                    <li><strong>Personalized protocols</strong> Every patient’s journey is unique, and so is the
+                        approach to their treatment. Care plans are carefully crafted by the medical team to match the
+                        specific type of tumor, genetic markers, and the individual goals of the patient, ensuring that
+                        every decision supports the best possible outcome.</li>
+                    <li><strong>Side-effect management</strong> Treatment can be challenging, but proactive measures are
+                        taken to make it easier. Patients receive medications and monitoring to prevent nausea, manage
+                        pain, and keep blood counts in a safe range, helping them maintain strength and comfort
+                        throughout therapy.</li>
+                    <li><strong>Integrated support</strong> Healing isn’t just about medicine—it’s about the whole
+                        person. Patients have access to counseling, nutrition guidance, and rehabilitation services
+                        alongside their treatment, so they receive emotional, physical, and practical support every step
+                        of the way.</li>
+                    <li><strong>Comfort-focused suites</strong> A soothing environment can make a big difference during
+                        treatment. Infusion rooms are designed to be warm, private, and calming, with attentive nursing
+                        care that ensures patients feel safe, cared for, and as comfortable as possible during their
+                        sessions.</li>
+                </ul>
+
+                <h4>Celebrating Recovery</h4>
+
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo1.webp" alt="Patient smiling">
+                    <div class="testimonial-comment">
+                        <p>"The chemotherapy sessions at Meditrust were truly compassionate. From the moment I arrived,
+                            the staff made me feel safe and supported, turning a challenging time into one filled with
+                            hope."</p>
+                        <div class="who">— Sarah M.</div>
+                        <div class="disease">Treated for: Breast Cancer</div>
+                        <div class="date">June 2025</div>
+                    </div>
+                </div>
+
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo2.jpg" alt="Patient with family">
+                    <div class="testimonial-comment">
+                        <p>The team was incredible in managing my side effects. Every concern was addressed quickly and
+                            with genuine kindness, making the treatment experience much more comfortable.</p>
+                        <div class="who">— Rahul S.</div>
+                        <div class="disease">Treated for: Leukemia</div>
+                        <div class="date">July 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RADIATION -->
+            <div id="radiation" class="cancercare-detail" role="tabpanel" hidden>
+                <h3>Radiation Therapy <span>: Precision & Protection</span></h3>
+                <p>
+                    Our radiation program uses image-guided and intensity-modulated techniques to target tumors
+                    precisely, sparing healthy tissue. Planning is individualized to each patient using the latest
+                    simulation and planning tools, ensuring effective tumor control with minimized long-term effects.
+                    Throughout therapy we provide symptom support, skin care coaching, and fatigue management. Patients
+                    meet regularly with radiation oncologists and specialist nurses to review progress and adjust care.
+                </p>
+
+                <ul class="cancercare-points">
+                    <li><strong>Advanced targeting</strong> Our imaging and delivery techniques precisely focus
+                        radiation
+                        on cancerous tissue, reducing exposure to surrounding healthy tissue and minimizing potential
+                        side effects.</li>
+                    <li><strong>Adaptive planning</strong> Radiation treatment plans are continuously reviewed and
+                        adjusted according to patient response, ensuring maximum effectiveness and safety.</li>
+                    <li><strong>Patient comfort</strong> Treatment rooms are designed for efficiency and comfort,
+                        shortening sessions while maintaining a calming environment that reduces patient stress.</li>
+                    <li><strong>Rehabilitation support</strong> Coordinated physical therapy, nutrition guidance, and
+                        post-treatment monitoring help patients recover strength and maintain quality of life.</li>
+                </ul>
+
+                <h4>Celebrating Recovery</h4>
+                <div class="testimonial-row">
+                    <img src="/static/img/radiation1.jpg" alt="Smiling patient">
+                    <div class="testimonial-comment">
+                        <p>“Undergoing radiation at Meditrust was a reassuring experience. Every step was carefully
+                            explained, and the team guided me with patience and compassion.”</p>
+                        <div class="who">— John D.</div>
+                        <div class="disease">Treated for: Prostate Cancer</div>
+                        <div class="date">May 2025</div>
+                    </div>
+                </div>
+
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo3.jpg" alt="Patient outdoors">
+                    <div class="testimonial-comment">
+                        <p>“I recovered faster than I expected thanks to the staff’s attention.Thanks to the attentive
+                            care of the staff, my recovery was much quicker than I anticipated”</p>
+                        <div class="who">— Priya L.</div>
+                        <div class="disease">Treated for: Brain Tumor</div>
+                        <div class="date">June 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IMMUNOTHERAPY -->
+            <div id="immuno" class="cancercare-detail" role="tabpanel" hidden>
+                <h3>Immunotherapy <span>: Strengthening the Body</span></h3>
+                <p>
+                    Immunotherapy leverages the immune system to fight cancer. Our specialists evaluate suitability
+                    through genomic testing and multidisciplinary review to offer targeted immunotherapies or
+                    combination approaches when beneficial.
+                </p>
+                <p>
+                    Patients receive detailed education about expected responses and side-effects, with rapid-access
+                    clinics for any concerns. We pair immunotherapy with supportive care to help patients stay strong
+                    through treatment.
+                </p>
+
+                <ul class="cancercare-points">
+                    <li><strong>Precision selection</strong> Patients undergo genomic and biomarker testing to identify
+                        which immunotherapy treatments will be most effective for their cancer type, optimizing
+                        outcomes.</li>
+                    <li><strong>Combination care</strong> Immunotherapy may be integrated with chemotherapy or targeted
+                        agents when needed, ensuring a coordinated and personalized approach.</li>
+                    <li><strong>Rapid response clinics</strong> Patients have quick access to clinicians for side-effect
+                        management and urgent concerns, minimizing disruptions in therapy.</li>
+                    <li><strong>Education & follow-up</strong> Ongoing guidance ensures patients and families are
+                        informed
+                        about what to expect and receive timely monitoring throughout treatment.</li>
+                </ul>
+
+                <h4>Celebrating Recovery</h4>
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo4.webp" alt="Patient after treatment">
+                    <div class="testimonial-comment">
+                        <p>“Immunotherapy at Meditrust gave me a second chance at life. The team was not only highly
+                            skilled but also deeply compassionate, guiding me through every step of treatment.”</p>
+                        <div class="who">— Maria K.</div>
+                        <div class="disease">Treated for: Lymphoma</div>
+                        <div class="date">April 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUPPORTIVE CARE -->
+            <div id="supportive" class="cancercare-detail" role="tabpanel" hidden>
+                <h3>Supportive Care <span>: Whole-person Healing</span></h3>
+                <p>
+                    Supportive care covers counseling, pain and symptom management, nutritional support, and
+                    rehabilitation. Our psychosocial team helps patients and families process emotions and practical
+                    challenges through every stage.
+                </p>
+                <p>
+                    We coordinate home-care plans, survivorship programs, and community resources to ensure long-term
+                    well-being. The goal is to restore dignity, comfort, and hope alongside clinical treatment.
+                </p>
+
+                <ul class="cancercare-points">
+                    <li><strong>Psycho-oncology support</strong> Our counselors and support groups help patients and
+                        families manage stress, anxiety, and emotional challenges during and after treatment.</li>
+                    <li><strong>Nutrition plans</strong> Dietitian-led programs guide patients to maintain strength,
+                        manage side effects, and optimize overall health throughout therapy.</li>
+                    <li><strong>Pain & symptom management</strong> Rapid interventions and ongoing monitoring reduce
+                        discomfort, helping patients maintain daily activities and quality of life.</li>
+                    <li><strong>Survivorship planning</strong> Long-term follow-up programs support recovery, monitor
+                        for recurrence, and help patients reintegrate into everyday life with confidence.</li>
+                </ul>
+
+                <h4>Celebrating Recovery</h4>
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo5.jpg" alt="Patient smiling">
+                    <div class="testimonial-comment">
+                        <p>“At Meditrust, I felt truly seen and supported as a whole person, not just as a patient with
+                            a disease. The team addressed my physical, emotional, and practical needs with compassion,
+                            making me feel cared for, understood.”</p>
+                        <div class="who">— David L.</div>
+                        <div class="disease">Treated for: Colorectal Cancer</div>
+                        <div class="date">March 2025</div>
+                    </div>
+                </div>
+
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo6.jpg" alt="Patient with family">
+                    <div class="testimonial-comment">
+                        <p>“The survivorship program at Meditrust was a true lifeline after my treatment. It helped me
+                            regain confidence, rebuild daily routines, and focus on my overall well-being.”</p>
+                        <div class="who">— Anita P.</div>
+                        <div class="disease">Treated for: Ovarian Cancer</div>
+                        <div class="date">April 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EARLY SCREENING -->
+            <div id="screening" class="cancercare-detail" role="tabpanel" hidden>
+                <h3>Early Screening <span>: Detecting Cancer at its Earliest</span></h3>
+                <p>
+                    Early detection saves lives. Our screening programs use the latest diagnostic imaging and blood
+                    tests to identify cancers in their most treatable stages. We make screenings accessible,
+                    stress-free, and compassionate.
+                </p>
+                <p>
+                    Each patient receives tailored guidance on which screenings are most beneficial based on age, family
+                    history, and risk factors.
+                </p>
+
+                <ul class="cancercare-points">
+                    <li><strong>Advanced imaging</strong> State-of-the-art MRI, CT, and mammography services provide
+                        highly detailed scans, allowing detection of tumors at their earliest and most treatable stages.
+                    </li>
+                    <li><strong>Risk assessment</strong> Genetic counseling and personalized prevention plans help
+                        patients understand their likelihood of developing cancer and take proactive steps to reduce
+                        risk.</li>
+                    <li><strong>Convenient scheduling</strong> Quick appointments and minimal waiting times ensure
+                        patients can complete screenings with ease and minimal disruption to daily life.</li>
+                    <li><strong>Follow-up care</strong> Continuous monitoring and early interventions guarantee timely
+                        management if abnormalities are detected, improving outcomes and peace of mind.</li>
+                </ul>
+
+                <h4>Celebrating Recovery</h4>
+                <div class="testimonial-row">
+                    <img src="/static/img/screening1.webp" alt="Patient at screening">
+                    <div class="testimonial-comment">
+                        <p>“The early screening program at Meditrust gave me immense peace of mind. The team was
+                            thorough, kind, and attentive, guiding me through every step with care and patience.”</p>
+                        <div class="who">— Lisa R.</div>
+                        <div class="disease">Screened for: Breast Cancer</div>
+                        <div class="date">May 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REHABILITATION -->
+            <div id="rehab" class="cancercare-detail" role="tabpanel" hidden>
+                <h3>Rehabilitation <span>: Regaining Strength & Confidence</span></h3>
+                <p>
+                    Rehabilitation is key to recovery. Our expert physiotherapists, occupational therapists, and
+                    psychologists provide holistic support to help patients regain independence and well-being.
+                    From physical therapy to emotional support, we ensure every patient feels empowered during
+                    survivorship.
+                </p>
+
+                <ul class="cancercare-points">
+                    <li><strong>Physiotherapy</strong> Targeted exercises restore strength, flexibility, and mobility,
+                        helping patients regain control of their bodies after treatment.</li>
+                    <li><strong>Occupational therapy</strong> Tailored guidance and adaptive techniques make daily
+                        activities easier, promoting independence and confidence.</li>
+                    <li><strong>Emotional support</strong> Counseling for anxiety, depression, and resilience ensures
+                        mental and emotional well-being during recovery.</li>
+                    <li><strong>Nutrition planning</strong> Customized diet plans restore energy, support immune
+                        function, and help patients maintain overall health post-treatment.</li>
+                </ul>
+
+                <h4>Celebrating Recovery</h4>
+                <div class="testimonial-row">
+                    <img src="/static/img/chemo1.webp" alt="Patient smiling">
+                    <div class="testimonial-comment">
+                        <p>"The chemotherapy sessions at Meditrust were truly compassionate..."</p>
+                        <div class="who">— Sarah M.</div>
+                        <div class="disease">Treated for: Breast Cancer</div>
+                        <div class="date">June 2025</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- MEDICINES BANNER -->
+<section class="cancercare-med-banner">
+    <div class="banner-overlay">
+        <div class="banner-content">
+            <h2>Get the Right Medicine at Your Doorstep</h2>
+            <p>Fast, safe, and reliable delivery of your prescribed medications right to your home. Trusted by patients
+                and caregivers, we ensure your medicines arrive on time, every time.</p>
+            <a href="#" class="banner-btn">Order Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- CANCER MEDICINES GRID -->
+<div class="cancercare-meds-section">
+    <div class="cancercare-meds-header">
+        <h2>Cancer Medicines</h2>
+        <a href="{% url 'product_list' %}?category={{ cancer_meds.first.categories.first.id }}">View All</a>
+    </div>
+
+    <div class="cancercare-products-grid">
+        {% for med in cancer_meds %}
+        <div class="cancercare-product-card">
+            {% if med.discount_percent %}
+            <span class="cancercare-discount-badge">
+                {{ med.discount_percent }}% OFF
+            </span>
+            {% endif %}
+            <img src="{{ med.image.url }}" alt="{{ med.name }}">
+            <div class="cancercare-product-info">
+                <h4>{{ med.name }}</h4>
+                <div>
+                    {% if med.is_available %}
+                    <span class="cancercare-price">${{ med.selling_price }}</span>
+                    <span class="cancercare-old-price">${{ med.mrp }}</span>
+                    {% else %}
+                    <span class="cancercare-out-of-stock">Out of Stock</span>
+                    {% endif %}
+                </div>
+                <div class="cancercare-stars">★★★★☆</div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No cancer medicines available right now.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+<!-- 
+{% block extra_js %}
+<script>
+    (function () {
+        const tabButtons = document.querySelectorAll('.cancercare-option');
+        const tabContents = document.querySelectorAll('.cancercare-detail');
+
+        function setActiveTab(targetId) {
+            tabContents.forEach(content => {
+                if (content.id === targetId) {
+                    content.classList.add('active-tab');
+                    content.removeAttribute('hidden');
+                } else {
+                    content.classList.remove('active-tab');
+                    content.setAttribute('hidden', '');
+                }
+            });
+
+            tabButtons.forEach(btn => {
+                const btnTarget = btn.getAttribute('data-target');
+                if (btnTarget === targetId) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                } else {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                }
+            });
+        }
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setActiveTab(btn.getAttribute('data-target'));
+            });
+        });
+
+        // Initialize first tab
+        setActiveTab('chemo');
+    })();
+</script>
+
+{% endblock %} -->

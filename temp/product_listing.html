@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - All Products{% endblock %}
+
+{% block content %}
+
+<div class="product-listing-container">
+    <div class="product-listing-header">
+        <h1>
+            {% if filter_type %}
+            {% if filter_type == 'hot_deals' %}🔥 Today's Hot Deals{% endif %}
+            {% if filter_type == 'must_haves' %}💊 Must Have Medicines{% endif %}
+            {% if filter_type == 'come_in_minutes' %}⚡ Medicines In Minutes{% endif %}
+            {% if filter_type == 'new_arrivals' %}🆕 New Arrivals{% endif %}
+            {% else %}
+            All Medicines
+            {% endif %}
+        </h1>
+
+        <div class="product-listing-search">
+            <form method="get" action="{% url 'product_list' %}">
+                {% if selected_category %}
+                <input type="hidden" name="category" value="{{ selected_category }}">
+                {% endif %}
+                {% if filter_type %}
+                <input type="hidden" name="filter" value="{{ filter_type }}">
+                {% endif %}
+
+                <input type="text" name="search" placeholder="Search products..." value="{{ search_query }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="product-listing-main">
+        <aside class="product-listing-sidebar">
+            <h3>Categories</h3>
+            <ul>
+                <li>
+                    <a href="{% url 'product_list' %}"
+                        class="{% if not selected_category and not filter_type %}active{% endif %}">
+                        All Products
+                    </a>
+                </li>
+                {% for cat in categories %}
+                <li>
+                    <a href="{% url 'product_list' %}?category={{ cat.id }}{% if filter_type %}&filter={{ filter_type }}{% endif %}"
+                        class="{% if selected_category == cat.id %}active{% endif %}">
+                        {{ cat.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h3>Sections</h3>
+            <ul>
+                <li><a href="{% url 'product_list' %}?filter=hot_deals"
+                        class="{% if filter_type == 'hot_deals' %}active{% endif %}">🔥 Hot Deals</a></li>
+                <li><a href="{% url 'product_list' %}?filter=must_haves"
+                        class="{% if filter_type == 'must_haves' %}active{% endif %}">💊 Must Haves</a></li>
+                <li><a href="{% url 'product_list' %}?filter=come_in_minutes"
+                        class="{% if filter_type == 'come_in_minutes' %}active{% endif %}">⚡ In Minutes</a></li>
+                <li><a href="{% url 'product_list' %}?filter=new_arrivals"
+                        class="{% if filter_type == 'new_arrivals' %}active{% endif %}">🆕 New Arrivals</a></li>
+            </ul>
+
+            <h3>Brand</h3>
+            <ul>
+                <li><a href="#">Adidas</a></li>
+                <li><a href="#">Zara</a></li>
+                <li><a href="#">Dickies</a></li>
+                <li><a href="#">Nike</a></li>
+                <li><a href="#">Uniqlo</a></li>
+            </ul>
+        </aside>
+
+        <div class="product-listing-grid">
+            {% for product in products %}
+            <div class="product-listing-card">
+                {% if product.discount_percent %}
+                <span class="product-listing-discount-badge">{{ product.discount_percent }}% OFF</span>
+                {% endif %}
+
+                <!-- Cute section badge -->
+                {% if product.is_hot_deal %}
+                <span class="product-listing-section-badge hot"></span>
+                {% elif product.is_must_haves %}
+                <span class="product-listing-section-badge must"></span>
+                {% elif product.come_in_minutes %}
+                <span class="product-listing-section-badge minutes"></span>
+                {% elif product.is_new_arrival %}
+                <span class="product-listing-section-badge new"></span>
+                {% endif %}
+
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <img src="/static/img/default-product.jpg" alt="{{ product.name }}">
+                {% endif %}
+
+                <div class="product-listing-card-body">
+                    <h4>{{ product.name }}</h4>
+                    <div>
+                        <span class="product-listing-price">₹{{ product.selling_price|floatformat:0 }}</span>
+                        {% if product.mrp %}
+                        <span class="product-listing-old-price">₹{{ product.mrp|floatformat:0 }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-listing-stars">★★★★☆</div>
+                    <a href="{% url 'product_detail' product.id %}" class="product-listing-btn">View Product</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products found in this section.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

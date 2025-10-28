@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - Cancer Care{% endblock %}
+
+{% block content %}
+
+<div class="register-container">
+    <div class="register-left">
+        <div class="register-left-content">
+            <h1 data-aos="fade-down" data-aos-duration="1200">Healthcare <br>Made Simple <i
+                    class="fa-solid fa-mask-face"></i></h1>
+            <p>Connect with licensed physicians anytime, anywhere. Whether it’s a quick consultation or ongoing care,
+                we make healthcare simple, fast, and accessible.</p>
+            <br>
+            <p>Your health is our priority — join today and experience personalized medical support at your fingertips.
+            </p>
+        </div>
+    </div>
+
+    <div class="register-right" data-aos="fade-left" data-aos-duration="1200">
+        <h2>Register</h2>
+        <p>Talk to a physician day or night, no matter where you are... Help your sick child get better, quicker.</p>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            <div class="form-row">
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+            </div>
+
+            <div class="form-group">
+                <input type="date" name="birth_date" placeholder="Birth Date">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="street_address" placeholder="Street Address">
+            </div>
+
+            <div class="form-row">
+                <input type="text" name="city" placeholder="City">
+                <input type="text" name="state" placeholder="State">
+            </div>
+
+            <div class="form-row">
+                <input type="text" name="zip_code" placeholder="Zip Code">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="gender" placeholder="Gender">
+            </div>
+
+            <div class="form-row">
+                <input type="text" name="contact_no" placeholder="Contact No.">
+                <input type="text" name="emergency_contact" placeholder="Emergency contact">
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+
+            <div class="form-row">
+                <input type="password" name="password1" placeholder="Password" required>
+                <input type="password" name="password2" placeholder="Confirm Password" required>
+            </div>
+
+            <div class="checkbox">
+                <input type="checkbox" required> I accept terms and conditions & privacy policy
+            </div>
+
+            <button type="submit" class="btn-submit">SIGN UP</button>
+        </form>
+    </div>
+</div>
+
+<div id="messageData" data-message="{% if messages %}{{ messages.0 }}{% endif %}"></div>
+
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-icon">✔️</span>
+        <p id="modalMessage"></p>
+        <button id="closeModal">OK</button>
+    </div>
+</div>
+
+{% endblock %}

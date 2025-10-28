@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}MediTrust - {{ product.name }}{% endblock %}
+
+{% block content %}
+<section class="product_detail-container">
+    <div class="product_detail-left">
+        <div class="product_detail-main-image">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+        <div class="product_detail-thumbnails">
+            {% if product.image2 %}
+            <img src="{{ product.image2.url }}" alt="{{ product.name }} - Image 2">
+            {% endif %}
+            {% if product.image3 %}
+            <img src="{{ product.image3.url }}" alt="{{ product.name }} - Image 3">
+            {% endif %}
+            {% if product.image4 %}
+            <img src="{{ product.image4.url }}" alt="{{ product.name }} - Image 4">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="product_detail-right">
+        <p class="product_detail-category">
+            {% for cat in product.categories.all %}{{ cat.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+        </p>
+        <h2 class="product_detail-title">{{ product.name }}</h2>
+
+        <div class="product_detail-price-section">
+            <span class="product_detail-price">₹{{ product.selling_price }}</span>
+            {% if product.mrp %}
+            <span class="product_detail-old-price">₹{{ product.mrp }}</span>
+            {% endif %}
+            {% if product.discount_percent %}
+            <span class="product_detail-discount">Save {{ product.discount_percent }}%</span>
+            {% endif %}
+        </div>
+
+        {% if product.stock > 0 %}
+        <p class="product_detail-availability">In Stock</p>
+        {% else %}
+        <p class="product_detail-availability out-of-stock">Out of Stock</p>
+        {% endif %}
+
+        <div class="product_detail-dosage">
+            <h4>Select Quantity</h4>
+            <div class="product_detail-dosage-options">
+                {% for option in product.quantity_options.all %}
+                <button class="product_detail-dosage-btn">{{ option.label }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="product_detail-actions">
+            <button class="product_detail-add-btn" data-product-id="{{ product.id }}" onclick="toggleWishlist(this)">
+                Add to Wishlist
+            </button>
+
+            <button class="product_detail-buy-btn" data-product-id="{{ product.id }}" onclick="addToCart(this)">
+                Add to Cart
+            </button>
+        </div>
+
+        <div class="product_detail-description">
+            <h4>Description</h4>
+            <p>{{ product.description }}</p>
+            {% if product.description2 %}
+            <p>{{ product.description2 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="product_detail-shipping">
+            <h4>Shipping Information</h4>
+            <ul>
+                <li><strong>Discount:</strong> {{ product.discount_percent }}% OFF</li>
+                <li><strong>Delivery Time:</strong> 2-5 Working Days</li>
+                <li><strong>Package Type:</strong> Sealed Medical Pack</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="product_detail-reviews">
+    <h3>Customer Ratings & Reviews</h3>
+    <div class="reviews-container">
+        <div class="overall-rating">
+            <h1>{{ product.rating|default:"4.5" }}</h1>
+            <p>out of 5</p>
+        </div>
+
+        <div class="rating-breakdown">
+            {% for star, percent in product.rating_distribution_list %}
+            <div class="rating-bar-row">
+                <span class="star-label">⭐ {{ star }}</span>
+                <div class="rating-bar" data-percent="{{ percent }}">
+                    <div class="rating-fill"></div>
+                </div>
+                <span class="percentage">{{ percent }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="reviews-list">
+            {% for review in product.reviews.all %}
+            <div class="review-item">
+                <strong class="review-user-name">{{ review.user_name }}</strong>
+                <div class="review-stars">⭐ {{ review.rating }} stars</div>
+                <p class="review-comment">{{ review.comment }}</p>
+                {% if review.user_image %}
+                <img src="{{ review.user_image.url }}" alt="{{ review.user_name }}" class="review-user-image">
+                {% else %}
+                <img src="/static/img/default-user.png" alt="{{ review.user_name }}" class="review-user-image">
+                {% endif %}
+            </div>
+            {% empty %}
+            <p>No reviews yet. Be the first to review this product!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="careplan-section5-section">
+    <div class="container">
+        <h2>You Might Also Like</h2>
+
+        <div class="careplan-section5-grid">
+            {% for product in products %}
+            <div class="careplan-section5-box">
+                <div class="careplan-section5-icons">
+                    <i class="fas fa-heart careplan-section5-save {% if product.id in wishlist_products %}saved{% endif %}"
+                        data-product-id="{{ product.id }}" onclick="toggleWishlist(this)">
+                    </i>
+                    <i class="fas fa-shopping-cart careplan-section5-cart" data-product-id="{{ product.id }}"
+                        onclick="addToCart(this)">
+                    </i>
+                </div>
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <img src="/static/img/default-product.jpg" alt="{{ product.name }}">
+                {% endif %}
+
+                <h3 class="careplan-section5-name">{{ product.name|truncatewords:3 }}</h3>
+                <p class="careplan-section5-price">₹{{ product.mrp }}</p>
+                <a href="{% url 'product_detail' product.id %}" class="careplan-section5-button">View Product</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

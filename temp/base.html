@@ -103,8 +103,19 @@
           {% endif %}
         </ul>
       </div>
-      <a href="{% url 'wishlist' %}"><i class="fas fa-heart" title="Wishlist"></i></a>
-      <a href="{% url 'cart' %}"><i class="fas fa-shopping-cart" title="Cart"></i></a>
+      <a href="{% url 'wishlist' %}" class="wishlist-icon">
+        <i class="fas fa-heart" title="Wishlist"></i>
+        {% if wishlist_count > 0 %}
+        <span class="wishlist-count">{{ wishlist_count }}</span>
+        {% endif %}
+      </a>
+
+      <a href="{% url 'cart' %}" class="cart-icon">
+        <i class="fas fa-shopping-cart" title="Cart"></i>
+        {% if cart_count > 0 %}
+        <span class="cart-count">{{ cart_count }}</span>
+        {% endif %}
+      </a>
       <i class="fas fa-location-dot" title="Location"></i>
     </div>
 

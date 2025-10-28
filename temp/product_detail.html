@@ -52,12 +52,15 @@
             </div>
         </div>
 
-        <div class="product_detail-actions">
-            <button class="product_detail-add-btn" data-product-id="{{ product.id }}" onclick="toggleWishlist(this)">
+        <div class="product_detail-actions"
+            data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
+            data-login-url="{% url 'login' %}" data-current-url="{{ request.path }}">
+
+            <button class="product_detail-add-btn" data-product-id="{{ product.id }}" onclick="handleWishlist(this)">
                 Add to Wishlist
             </button>
 
-            <button class="product_detail-buy-btn" data-product-id="{{ product.id }}" onclick="addToCart(this)">
+            <button class="product_detail-buy-btn" data-product-id="{{ product.id }}" onclick="handleCart(this)">
                 Add to Cart
             </button>
         </div>
@@ -149,4 +152,38 @@
         </div>
     </div>
 </section>
+
+<script>
+    function handleWishlist(button) {
+        const container = button.closest('.product_detail-actions');
+        const isAuthenticated = container.dataset.isAuthenticated === 'true';
+        const loginUrl = container.dataset.loginUrl;
+        const currentUrl = container.dataset.currentUrl;
+
+        if (!isAuthenticated) {
+            window.location.href = `${loginUrl}?next=${encodeURIComponent(currentUrl)}`;
+            return;
+        }
+
+        // if logged in
+        toggleWishlist(button);
+    }
+
+    function handleCart(button) {
+        const container = button.closest('.product_detail-actions');
+        const isAuthenticated = container.dataset.isAuthenticated === 'true';
+        const loginUrl = container.dataset.loginUrl;
+        const currentUrl = container.dataset.currentUrl;
+
+        if (!isAuthenticated) {
+            window.location.href = `${loginUrl}?next=${encodeURIComponent(currentUrl)}`;
+            return;
+        }
+
+        // if logged in
+        addToCart(button);
+    }
+</script>
+
+
 {% endblock %}

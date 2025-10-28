@@ -13,6 +13,7 @@ body {
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial;
   color: #111827;
+  overflow-x: hidden;
 }
 
 header {
@@ -1827,9 +1828,48 @@ iframe {
   transition: background 0.3s ease;
 }
 
+.wishlist-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.wishlist-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 5px;
+  min-width: 18px;
+  text-align: center;
+}
+
 .btn-add-cart:hover {
   background: #1d4ed8;
 }
+
+.cart-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: #3498db;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 5px;
+  min-width: 18px;
+  text-align: center;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

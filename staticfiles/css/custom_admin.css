@@ -1,0 +1,40 @@
+/* Header background */
+#header {
+    background-color: #63c1e5;
+    /* deep blue */
+    color: white;
+}
+
+/* Header title */
+#header #site-name a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#header #site-name {
+    font-weight: 300;
+}
+
+#site-name img {
+    height: 40px;
+}
+
+
+/* Sidebar section headers */
+.module caption {
+    background: #4ac1f7;
+    /* teal */
+    color: white;
+    font-weight: bold;
+}
+
+/* Buttons */
+.button,
+input[type=submit] {
+    background: #ff4081;
+    /* pink */
+    color: white;
+    border-radius: 8px;
+    padding: 6px 12px;
+}

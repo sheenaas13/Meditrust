@@ -150,5 +150,5 @@ RAZORPAY_KEY_ID = "rzp_test_RTG5YlPCt0jk2i"
 RAZORPAY_KEY_SECRET = "VohzzgccAsPWyEs4ZgThmjQu"
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'      # where to go after login
-LOGOUT_REDIRECT_URL = 'home'     # where to go after logout
+LOGIN_REDIRECT_URL = 'home'     
+LOGOUT_REDIRECT_URL = 'home'     

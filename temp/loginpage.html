@@ -15,7 +15,7 @@
             <p>You are already logged in.</p>
             <form method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="login-btn">Logout</button>                
+                <button type="submit" class="login-btn">Logout</button>
             </form>
             <button onclick="window.location.href='/home'" class="btn-home">Go To HomePage</button>
 
@@ -42,7 +42,7 @@
                     <label>
                         <input type="checkbox" name="remember"> Remember me
                     </label>
-                    <a href="" class="forgot-password">Forgot Password?</a>
+                    <a href="#" class="forgot-password" onclick="openForgotModal()">Forgot Password?</a>
                 </div>
 
                 <button type="submit" class="login-btn">Login</button>
@@ -54,6 +54,30 @@
     </div>
 </section>
 
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeForgotModal()">&times;</span>
+        <h2>Forgot Password?</h2>
+        <p>Enter your email address and we’ll send you a reset link.</p>
+        <form id="forgotPasswordForm" method="POST" action="{% url 'password_reset' %}">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <button type="submit" class="login-btn">Send Reset Link</button>
+        </form>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="resetSuccessModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-icon">✔️</span>
+        <p>Password reset link sent! Please check your email.</p>
+        <button onclick="closeSuccessModal()">OK</button>
+    </div>
+</div>
+
+
 <div id="messageData" data-message="{% if messages %}{{ messages.0 }}{% endif %}"></div>
 
 <div id="successModal" class="modal">
@@ -63,5 +87,48 @@
         <button id="closeModal">OK</button>
     </div>
 </div>
+
+<script>
+    function openForgotModal() {
+        document.getElementById('forgotPasswordModal').style.display = 'block';
+    }
+
+    function closeForgotModal() {
+        document.getElementById('forgotPasswordModal').style.display = 'none';
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('resetSuccessModal').style.display = 'none';
+    }
+
+    // Optional: close on outside click
+    window.onclick = function (event) {
+        const forgotModal = document.getElementById('forgotPasswordModal');
+        if (event.target == forgotModal) {
+            forgotModal.style.display = "none";
+        }
+    }
+
+    // AJAX form submission
+    document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("{% url 'password_reset' %}", {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(response => {
+                if (response.ok) {
+                    closeForgotModal();
+                    document.getElementById('resetSuccessModal').style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
 
 {% endblock %}

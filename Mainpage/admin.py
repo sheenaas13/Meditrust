@@ -53,3 +53,7 @@ class ReviewAdmin(admin.ModelAdmin):
 admin.site.register(Order)
 
 admin.site.register(OrderItem)
+
+admin.site.register(ContactQuery)
+
+admin.site.register(Subscribe)

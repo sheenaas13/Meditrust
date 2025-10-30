@@ -164,30 +164,33 @@
         <div class="col">
           <h5>About</h5>
           <ul>
-            <li><a href="#">Planning</a></li>
-            <li><a href="#">Research</a></li>
-            <li><a href="#">Consulting</a></li>
-            <li><a href="#">Analysis</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+            <li><a href="{% url 'product_list' %}"
+                class="{% if not selected_category and not filter_type %}active{% endif %}">All Medicines</a></li>
+            <li><a href="{% url 'careplan' %}">Care Plan</a></li>
           </ul>
         </div>
 
         <div class="col">
           <h5>Menu</h5>
           <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Service</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Con.</a></li>
+            <li><a href="#">Return Policy</a></li>
+            <li><a href="{% url 'consultdoc' %}">Consult Doctors</a></li>
           </ul>
         </div>
 
         <div class="col">
           <h5>Services</h5>
           <ul>
-            <li><a href="#">Logo</a></li>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Branding</a></li>
-            <li><a href="#">Marketing</a></li>
+            <li><a href="{% url 'product_list' %}"
+                class="{% if not selected_category and not filter_type %}active{% endif %}">Order Medicines</a></li>
+            <li><a href="{% url 'labtest' %}">Book Tests</a></li>
+            <li><a href="{% url 'ayurveda' %}">Ayurveda Care</a></li>
+            <li><a href="#">Articles</a></li>
+            <li><a href="{% url 'cancercare' %}">Cancer Care</a></li>
           </ul>
         </div>
 
@@ -293,7 +296,6 @@
   <script src="{% static 'script.js' %}"></script>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <button id="rzp-button">Pay Now</button>
 
   <script>
     var options = {

@@ -69,6 +69,7 @@ def labtest(request):
 
 def service_booking(request, service_id):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     service = get_object_or_404(PharmacyService, id=service_id)
 
     if not service.is_available:
@@ -151,29 +152,34 @@ Thank you!
         'service': service,
         'doctors': doctors,
         'booked_slots': booked_slots,
-        'categories': categories
+        'categories': categories,
+        'services': services,
     }
     return render(request, 'servicebooking.html', context)
 
 def booking_success(request, booking_id):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     booking = get_object_or_404(ServiceBooking, id=booking_id)
-    return render(request, 'bookingsucess.html', {'booking': booking,'categories': categories})
+    return render(request, 'bookingsucess.html', {'booking': booking,'categories': categories,'services': services,})
 
 def consultdoc(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     doctor=Doctor.objects.all()
-    return render(request,'consultdoc.html', {"MEDIA_URL": settings.MEDIA_URL,"doctor":doctor,'categories': categories})
+    return render(request,'consultdoc.html', {"MEDIA_URL": settings.MEDIA_URL,"doctor":doctor,'categories': categories,'services': services,})
 
 def cancercare(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     cancer_meds = Product.objects.filter(categories__name__iexact='Cancer Care')    
-    return render(request, "cancercare.html", {'cancer_meds': cancer_meds,'categories': categories})
+    return render(request, "cancercare.html", {'cancer_meds': cancer_meds,'categories': categories,'services': services,})
 
 def ayurveda(request):
     ayurvedic_meds = Product.objects.filter(categories__name__iexact='Ayurveda')
     categories = Category.objects.all()
-    return render(request, "ayurveda.html", {'ayurvedic_meds': ayurvedic_meds,'categories': categories})
+    services = PharmacyService.objects.all()
+    return render(request, "ayurveda.html", {'ayurvedic_meds': ayurvedic_meds,'categories': categories,'services': services,})
 
 def signup_view(request):
     # categories = Category.objects.all()
@@ -255,6 +261,7 @@ def logout_view(request):
 @login_required(login_url='login')
 def profile(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     user = request.user 
     orders = Order.objects.filter(user=user).order_by('-created_at')
 
@@ -285,13 +292,14 @@ def profile(request):
         messages.success(request, "Profile updated successfully!")
         return redirect("profile")
 
-    return render(request, 'profilepage.html', {"user": user,'orders': orders,'categories': categories})
+    return render(request, 'profilepage.html', {"user": user,'orders': orders,'categories': categories,'services': services,})
 
 def partnership(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     products = Product.objects.all()
     wishlist_products = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
-    return render(request,'partnership.html', {'products': products,'wishlist_products': wishlist_products,'categories': categories})
+    return render(request,'partnership.html', {'products': products,'wishlist_products': wishlist_products,'categories': categories,'services': services})
 
 @login_required(login_url='login')
 def toggle_wishlist(request):
@@ -313,14 +321,16 @@ def toggle_wishlist(request):
 @login_required(login_url='login')
 def wishlist(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     wishlist_products = Product.objects.filter(wishlist__user=request.user)
-    return render(request, 'wishlist.html', {'wishlist_products': wishlist_products,'categories': categories})
+    return render(request, 'wishlist.html', {'wishlist_products': wishlist_products,'categories': categories,'services': services})
 
 def careplan(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     products = Product.objects.all()
     wishlist_products = Product.objects.filter(wishlist__user=request.user).values_list('id', flat=True) if request.user.is_authenticated else []
-    return render(request, 'careplan.html', {'products': products, 'wishlist_products': wishlist_products,'categories': categories})
+    return render(request, 'careplan.html', {'products': products, 'wishlist_products': wishlist_products,'categories': categories,'services': services})
 
 @login_required(login_url='login')
 def delete_wishlist_item(request):
@@ -339,6 +349,7 @@ def delete_wishlist_item(request):
 @login_required(login_url='login')
 def cart(request):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     cart_items = Cart.objects.filter(user=request.user)
     subtotal = sum(item.total_price for item in cart_items)
     discount_percent = 10
@@ -353,7 +364,8 @@ def cart(request):
         'discount': discount,
         'delivery_fee': delivery_fee,
         'total': total,
-        'categories': categories
+        'categories': categories,
+        'services': services
     }
     return render(request,'cartpage.html',context)
 
@@ -402,6 +414,7 @@ def remove_from_cart(request, item_id):
 
 def product_detail(request, id):
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
     product = get_object_or_404(Product, id=id)
     related_products = Product.objects.filter(
         Q(categories__in=product.categories.all()) |
@@ -419,7 +432,8 @@ def product_detail(request, id):
         'related_products': related_products,
         'products': products,
         'wishlist_products': wishlist_products,
-        'categories': categories
+        'categories': categories,
+        'services': services
     }
 
     return render(request, 'product_detail.html', context)
@@ -490,7 +504,8 @@ def ordered_items_view(request):
 
 def product_listing(request):
     categories = Category.objects.all()
-    return render(request,'product_listing.html',{'categories': categories})
+    services = PharmacyService.objects.all()
+    return render(request,'product_listing.html',{'categories': categories,'services': services})
 
 def product_list(request):
     category_id = request.GET.get('category')
@@ -515,6 +530,7 @@ def product_list(request):
         products = products.filter(name__icontains=search_query)
 
     categories = Category.objects.all()
+    services = PharmacyService.objects.all()
 
     context = {
         'products': products,
@@ -522,6 +538,7 @@ def product_list(request):
         'selected_category': int(category_id) if category_id else None,
         'search_query': search_query or '',
         'filter_type': filter_type or '',
+        'services': services
     }
     return render(request, 'product_listing.html', context)
 
@@ -611,4 +628,38 @@ def service_payment_success(request):
 
     return redirect('home')
 
+def contact(request):
+    categories = Category.objects.all()
+    services = PharmacyService.objects.all()
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
 
+        ContactQuery.objects.create(
+            name=name,
+            email=email,
+            phone=phone,
+            message=message
+        )
+
+        messages.success(request, "Your query has been submitted! Our team will contact you shortly through mail.")
+        return redirect('contact')
+    
+    return render(request,'contactpage.html',{'categories': categories,'services': services})
+
+def subscribe_view(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+
+        # Check if already subscribed
+        if Subscribe.objects.filter(email=email).exists():
+            messages.info(request, "You're already subscribed to MediTrust updates!")
+        else:
+            Subscribe.objects.create(email=email)
+            messages.success(request, "Thank you for subscribing to MediTrust! You'll now receive the latest updates.")
+        
+        return redirect('contact')  # redirect back to your contact page
+
+    return redirect('contact')

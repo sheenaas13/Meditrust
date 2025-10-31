@@ -663,3 +663,12 @@ def subscribe_view(request):
         return redirect('contact')  # redirect back to your contact page
 
     return redirect('contact')
+
+def privacy(request):
+    return render(request,'privacypage.html')
+
+def terms(request):
+    return render(request,'termspage.html')
+
+def returnpolicy(request):
+    return render(request,'returnpolicy.html')

@@ -7517,3 +7517,340 @@ li:hover>.Lab-dropdown {
   margin-bottom: -24px;
 
 }
+
+.privacypolicy-page {
+  width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  background: #efede8;
+  padding: 48px 20px;
+}
+
+.privacypolicy-card {
+  background: #fbfaf8;
+  padding: 36px;
+  border-radius: 19px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.privacypolicy-brand-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.privacypolicy-brand-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #222800;
+  letter-spacing: 0.6px;
+}
+
+.privacypolicy-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  margin: 6px 0 18px;
+  letter-spacing: 0.6px;
+}
+
+.privacypolicy-lead {
+  color: #6b6b6b;
+  margin: 0 0 14px 0;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.privacypolicy-content h2 {
+  font-size: 19px;
+  font-weight: 800;
+  margin-top: 26px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.privacypolicy-content h3 {
+  font-size: 16px;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: #111;
+}
+
+.privacypolicy-content p {
+  margin: 0 0 12px 0;
+  color: #222;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.privacypolicy-content ul {
+  margin: 8px 0 12px 22px;
+  color: #222;
+}
+
+.privacypolicy-content li {
+  margin: 8px 0;
+}
+
+.privacypolicy-content a {
+  color: #222800;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(34, 40, 0, 0.08);
+  padding-bottom: 1px;
+}
+
+.privacypolicy-content a:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 640px) {
+  .privacypolicy-page {
+    padding: 20px;
+  }
+
+  .privacypolicy-title {
+    font-size: 24px;
+  }
+
+  .privacypolicy-card {
+    padding: 20px;
+  }
+}
+
+.terms-page {
+  background-color: #efede8;
+  color: #000;
+  font-family: "Poppins", Arial, sans-serif;
+  padding: 34px 22px;
+}
+
+.terms-container {
+  width: 100%;
+  background-color: white;
+  padding: 31px;
+  border-radius: 15px;
+  /* margin: 0 auto; */
+}
+
+.terms-title {
+  font-size: 36px;
+  font-family: sans-serif;
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 19px;
+  margin-top: -6px;
+}
+
+.terms-tabs {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.terms-tabs a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+}
+
+.terms-tab-active {
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+.terms-section {
+  margin-bottom: 40px;
+}
+
+.terms-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.terms-section p {
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.terms-section ol {
+  margin-left: 25px;
+}
+
+.terms-section li {
+  margin-bottom: 10px;
+}
+
+.terms-section a {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* Enable smooth scrolling globally */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Tabs styling */
+.terms-tabs {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.terms-tabs a {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.terms-tabs a:hover {
+  color: #000;
+}
+
+.terms-tab-active {
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 6px;
+}
+
+/* Section spacing and readability */
+.terms-section {
+  margin-bottom: 60px;
+}
+
+.terms-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #111;
+}
+
+.terms-section p {
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Ordered list inside sections */
+.terms-section ol {
+  margin-left: 25px;
+}
+
+.terms-section li {
+  margin-bottom: 10px;
+}
+
+/* Anchor links */
+.terms-section a {
+  color: #000;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.terms-section a:hover {
+  color: #007bff;
+}
+
+.returnpolicy-page {
+  font-family: "Poppins", sans-serif;
+  color: #111;
+  padding: 38px 29px;
+  /* padding: 40px 20px; */
+  background-color: #efede8;
+}
+
+.returnpolicy-container {
+  width: 100%;
+  background-color: white;
+  padding: 32px;
+  border-radius: 20px;
+  /* margin: auto; */
+}
+
+.returnpolicy-brand-bar {
+  text-align: left;
+  margin-bottom: 25px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.returnpolicy-brand-title {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.returnpolicy-title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 30px;
+  margin-top: -14px;
+}
+
+.returnpolicy-tabs {
+  display: flex;
+  justify-content: left;
+  gap: 25px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 40px;
+  padding-bottom: 8px;
+}
+
+.returnpolicy-tabs a {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.returnpolicy-tabs a:hover {
+  color: #000;
+}
+
+.returnpolicy-tab-active {
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 6px;
+}
+
+.returnpolicy-section {
+  margin-bottom: 60px;
+}
+
+.returnpolicy-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.returnpolicy-section p {
+  line-height: 1.8;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.returnpolicy-section ul {
+  margin-left: 25px;
+  margin-bottom: 15px;
+}
+
+.returnpolicy-section li {
+  margin-bottom: 8px;
+}
+
+.returnpolicy-section a {
+  color: #000;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.returnpolicy-section a:hover {
+  color: #007bff;
+}

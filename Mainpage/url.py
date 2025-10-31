@@ -66,4 +66,9 @@ path('reset/done/',
 path('contact', views.contact, name='contact'),
 
 path('subscribe/', views.subscribe_view, name='subscribe'),
+
+path('privacy', views.privacy, name='privacy'),
+
+path('terms', views.terms, name='terms'),
+path('return', views.returnpolicy, name='return'),
 ]

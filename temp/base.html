@@ -175,9 +175,9 @@
         <div class="col">
           <h5>Menu</h5>
           <ul>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms & Con.</a></li>
-            <li><a href="#">Return Policy</a></li>
+            <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+            <li><a href="{% url 'terms' %}">Terms & Con.</a></li>
+            <li><a href="{% url 'return' %}">Return Policy</a></li>
             <li><a href="{% url 'consultdoc' %}">Consult Doctors</a></li>
           </ul>
         </div>
@@ -212,7 +212,7 @@
 
     <div class="bottom">
       <div class="left">
-        <a href="#">Privacy Policy</a>
+        <a href="{% url 'privacy' %}">Privacy Policy</a>
         <a href="#">Our History</a>
         <a href="#">What We Do</a>
       </div>

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}MediTrust - Articles{% endblock %}
+{% block content %}
+
+<section class="articles-hero-section">
+    <div class="articles-hero-overlay">
+        <div class="consultdoc-kicker">Meditrust Pharmacy</div>
+        <h2>Empowering Health Through Innovation</h2>
+        <p>At MediTrust, we harness technology and compassion to build a healthier future for everyone.</p>
+        <button class="ayuveda-btn">Learn More</button>
+    </div>
+</section>
+
+<nav class="articles-nav">
+    <a href="#" class="category-link" data-category="all">All</a>
+    {% for cat in categories %}
+    <a href="#" class="category-link" data-category="{{ cat.slug }}">{{ cat.name }}</a>
+    {% endfor %}
+</nav>
+
+<div class="articles-container" id="articles-container">
+    <div class="articles-row">
+        {% if big_article %}
+        <div class="articles-big">
+            <img src="{{ big_article.image.url }}" alt="{{ big_article.title }}">
+            <div class="articles-big-content">
+                <h2>{{ big_article.title }}</h2>
+                <p>{{ big_article.short_description }}</p>
+                <small>By {{ big_article.author }} · {{ big_article.created_at|date:"d M Y" }}</small>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="articles-small-group">
+            {% for article in small_articles %}
+            <div class="articles-small">
+                <img src="{{ article.image.url }}" alt="{{ article.title }}">
+                <div class="articles-small-content">
+                    <h3>{{ article.title|truncatewords:5 }}</h3>
+                    <p>{{ article.short_description|truncatewords:10 }}</p>
+                    <small>By {{ article.author }} · {{ article.created_at|date:"d M Y" }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const categoryLinks = document.querySelectorAll('.category-link');
+        const articlesContainer = document.getElementById('articles-container');
+
+        categoryLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const slug = e.target.getAttribute('data-category');
+
+                fetch(`/articles/filter/${slug}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let html = '<div class="articles-row">';
+
+                        // Big article
+                        if (data.big_article) {
+                            html += `
+                            <div class="articles-big">
+                                <img src="${data.big_article.image}" alt="${data.big_article.title}">
+                                <div class="articles-big-content">
+                                    <h2>${data.big_article.title}</h2>
+                                    <p>${data.big_article.short_description}</p>
+                                    <small>By ${data.big_article.author} · ${data.big_article.created_at}</small>
+                                </div>
+                            </div>
+                        `;
+                        }
+
+                        // Small articles
+                        html += '<div class="articles-small-group">';
+                        if (data.small_articles && data.small_articles.length > 0) {
+                            data.small_articles.forEach(article => {
+                                html += `
+                                <div class="articles-small">
+                                    <img src="${article.image}" alt="${article.title}">
+                                    <div class="articles-small-content">
+                                        <h3>${article.title}</h3>
+                                        <p>${article.short_description}</p>
+                                        <small>By ${article.author} · ${article.created_at}</small>
+                                    </div>
+                                </div>
+                            `;
+                            });
+                        } else {
+                            html += '<p>No small articles found for this category.</p>';
+                        }
+                        html += '</div></div>'; // close row and small-group
+
+                        articlesContainer.innerHTML = html;
+                    })
+                    .catch(err => {
+                        console.error('Error fetching articles:', err);
+                        articlesContainer.innerHTML = '<p>Failed to load articles. Please try again.</p>';
+                    });
+            });
+        });
+    });
+</script>
+
+{% endblock %}

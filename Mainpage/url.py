@@ -71,4 +71,8 @@ path('privacy', views.privacy, name='privacy'),
 
 path('terms', views.terms, name='terms'),
 path('return', views.returnpolicy, name='return'),
+
+path('article/', views.article, name='article'),
+path('articles/filter/<slug:slug>/', views.filter_articles, name='filter_articles'),
+
 ]

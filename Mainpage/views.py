@@ -672,3 +672,55 @@ def terms(request):
 
 def returnpolicy(request):
     return render(request,'returnpolicy.html')
+
+def article(request):
+    categories = ArticleCategory.objects.all()
+    # Show all articles by default (when page loads)
+    articles = Article.objects.all().order_by('-created_at')
+
+    # Separate for layout (BIG + SMALL)
+    big_article = articles.filter(article_type='BIG').first()
+    small_articles = articles.filter(article_type='SMALL')[:2]
+
+    context = {
+        "categories": categories,
+        "big_article": big_article,
+        "small_articles": small_articles,
+    }
+    return render(request, 'articlespage.html', context)
+
+
+def filter_articles(request, slug):
+    if slug == "all":
+        articles = Article.objects.all().order_by('-created_at')
+    else:
+        category = get_object_or_404(ArticleCategory, slug=slug)
+        articles = Article.objects.filter(category=category).order_by('-created_at')
+
+    big_article = articles.filter(article_type='BIG').first()
+    small_articles = articles.filter(article_type='SMALL')[:2]
+
+    data = {
+        "big_article": None,
+        "small_articles": [],
+    }
+
+    if big_article:
+        data["big_article"] = {
+            "title": big_article.title,
+            "image": big_article.image.url if big_article.image else "",
+            "short_description": big_article.short_description,
+            "author": big_article.author,
+            "created_at": big_article.created_at.strftime('%d %B %Y'),
+        }
+
+    for article in small_articles:
+        data["small_articles"].append({
+            "title": article.title,
+            "image": article.image.url if article.image else "",
+            "short_description": article.short_description,
+            "author": article.author,
+            "created_at": article.created_at.strftime('%d %B %Y'),
+        })
+
+    return JsonResponse(data)

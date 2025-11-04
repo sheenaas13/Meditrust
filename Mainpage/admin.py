@@ -57,3 +57,7 @@ admin.site.register(OrderItem)
 admin.site.register(ContactQuery)
 
 admin.site.register(Subscribe)
+
+admin.site.register(ArticleCategory)
+
+admin.site.register(Article)

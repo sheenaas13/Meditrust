@@ -83,7 +83,7 @@
         </li>
       </ul>
     </nav>
-
+    
     <!-- Icons -->
     <div class="header-icons">
       <div class="user-dropdown">
@@ -189,7 +189,7 @@
                 class="{% if not selected_category and not filter_type %}active{% endif %}">Order Medicines</a></li>
             <li><a href="{% url 'labtest' %}">Book Tests</a></li>
             <li><a href="{% url 'ayurveda' %}">Ayurveda Care</a></li>
-            <li><a href="#">Articles</a></li>
+            <li><a href="{% url 'article' %}">Blogs</a></li>
             <li><a href="{% url 'cancercare' %}">Cancer Care</a></li>
           </ul>
         </div>

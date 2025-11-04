@@ -254,3 +254,31 @@ class Subscribe(models.Model):
 
     def __str__(self):
         return self.email
+
+class ArticleCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+
+    class Meta:
+        verbose_name_plural = "Article Categories"
+
+    def __str__(self):
+        return self.name
+
+
+class Article(models.Model):
+    CATEGORY_CHOICES = [
+        ('BIG', 'Featured Large Article'),
+        ('SMALL', 'Small Article'),
+    ]
+
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='articles/')
+    category = models.ForeignKey(ArticleCategory, on_delete=models.CASCADE, related_name="articles")
+    article_type = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='SMALL')
+    short_description = models.TextField()
+    author = models.CharField(max_length=100, default="Admin")
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

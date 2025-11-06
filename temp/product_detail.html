@@ -44,12 +44,19 @@
         {% endif %}
 
         <div class="product_detail-dosage">
+            {% if product.medicine_type == 'LIQUID' %}
             <h4>Select Quantity</h4>
             <div class="product_detail-dosage-options">
                 {% for option in product.quantity_options.all %}
                 <button class="product_detail-dosage-btn">{{ option.label }}</button>
+                {% empty %}
+                <p>No quantity options available for this product.</p>
                 {% endfor %}
             </div>
+            {% else %}
+            <h4>Pack Details</h4>
+            <p><strong>Pack:</strong> 1</p>
+            {% endif %}
         </div>
 
         <div class="product_detail-actions"

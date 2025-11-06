@@ -61,6 +61,20 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    medicine_type = models.CharField(
+    max_length=50,
+    choices=[
+        ('LIQUID', 'Liquid'),
+        ('TABLET', 'Tablet'),
+        ('CAPSULE', 'Capsule'),
+        ('CREAM', 'Cream'),
+        ('SYRUP', 'Syrup'),
+        ('INJECTION', 'Injection'),
+        ('OTHER', 'Other'),
+    ],
+    default='OTHER'
+    )
+
     @property
     def rating(self):
         reviews = self.reviews.all()
@@ -198,6 +212,9 @@ class Cart(models.Model):
 class QuantityOption(models.Model):
     product = models.ForeignKey(Product, related_name='quantity_options', on_delete=models.CASCADE)
     label = models.CharField(max_length=50)  # e.g. '120ml', '250ml', '500ml'
+
+    def __str__(self):
+        return f"{self.product.name} - {self.label}"
 
 class Review(models.Model):
     product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)

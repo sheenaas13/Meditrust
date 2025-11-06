@@ -152,3 +152,14 @@ RAZORPAY_KEY_SECRET = "VohzzgccAsPWyEs4ZgThmjQu"
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'     
 LOGOUT_REDIRECT_URL = 'home'     
+
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  
+
+SHOPIFY_API_KEY = os.getenv("SHOPIFY_API_KEY")
+SHOPIFY_API_SECRET = os.getenv("SHOPIFY_API_SECRET")
+SHOPIFY_STORE_URL = os.getenv("SHOPIFY_STORE_URL")
+SHOPIFY_ACCESS_TOKEN = os.getenv("SHOPIFY_ACCESS_TOKEN")

@@ -416,6 +416,7 @@ def product_detail(request, id):
     categories = Category.objects.all()
     services = PharmacyService.objects.all()
     product = get_object_or_404(Product, id=id)
+    quantity_options = product.quantity_options.all()
     related_products = Product.objects.filter(
         Q(categories__in=product.categories.all()) |
         Q(subcategories__in=product.subcategories.all())
@@ -433,7 +434,8 @@ def product_detail(request, id):
         'products': products,
         'wishlist_products': wishlist_products,
         'categories': categories,
-        'services': services
+        'services': services,
+        "quantity_options": quantity_options,
     }
 
     return render(request, 'product_detail.html', context)
@@ -722,5 +724,30 @@ def filter_articles(request, slug):
             "author": article.author,
             "created_at": article.created_at.strftime('%d %B %Y'),
         })
+
+    return JsonResponse(data)
+
+import requests
+from django.http import JsonResponse
+from django.conf import settings
+
+def auth_callback(request):
+    shop = request.GET.get("shop")
+    code = request.GET.get("code")
+
+    if not code:
+        return JsonResponse({"error": "No authorization code returned."})
+
+    token_url = f"https://{shop}/admin/oauth/access_token"
+    payload = {
+        "client_id": settings.SHOPIFY_API_KEY,
+        "client_secret": settings.SHOPIFY_API_SECRET,
+        "code": code,
+    }
+
+    response = requests.post(token_url, json=payload)
+    data = response.json()
+
+    print("ACCESS TOKEN:", data) 
 
     return JsonResponse(data)

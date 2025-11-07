@@ -691,7 +691,6 @@ def article(request):
     }
     return render(request, 'articlespage.html', context)
 
-
 def filter_articles(request, slug):
     if slug == "all":
         articles = Article.objects.all().order_by('-created_at')
@@ -728,15 +727,29 @@ def filter_articles(request, slug):
     return JsonResponse(data)
 
 import requests
-from django.http import JsonResponse
-from django.conf import settings
+import urllib.parse
+
+def shopify_install(request):
+    shop = request.GET.get("shop")
+    if not shop:
+        return JsonResponse({"error": "Missing shop parameter"})
+
+    scopes = "read_products,write_products"
+    redirect_uri = "https://meditrust-1.onrender.com/auth/callback"
+    install_url = (
+        f"https://{shop}/admin/oauth/authorize?"
+        f"client_id={settings.SHOPIFY_API_KEY}"
+        f"&scope={urllib.parse.quote(scopes)}"
+        f"&redirect_uri={urllib.parse.quote(redirect_uri)}"
+    )
+    return redirect(install_url)
 
 def auth_callback(request):
     shop = request.GET.get("shop")
     code = request.GET.get("code")
 
     if not code:
-        return JsonResponse({"error": "No authorization code returned."})
+        return JsonResponse({"error": "No code found"})
 
     token_url = f"https://{shop}/admin/oauth/access_token"
     payload = {
@@ -748,6 +761,6 @@ def auth_callback(request):
     response = requests.post(token_url, json=payload)
     data = response.json()
 
-    print("ACCESS TOKEN:", data) 
-
+    print("ACCESS TOKEN:", data)  # it will appear in your Render logs
     return JsonResponse(data)
+

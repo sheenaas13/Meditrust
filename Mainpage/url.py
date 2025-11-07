@@ -58,7 +58,7 @@ path('reset/<uidb64>/<token>/',
      auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
      name='password_reset_confirm'),
 
-    # Step 4: Password successfully changed
+
 path('reset/done/', 
          auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), 
          name='password_reset_complete'),
@@ -74,5 +74,8 @@ path('return', views.returnpolicy, name='return'),
 
 path('article/', views.article, name='article'),
 path('articles/filter/<slug:slug>/', views.filter_articles, name='filter_articles'),
+
+path("install/", views.shopify_install, name="shopify_install"),
+path("auth/callback", views.auth_callback, name="shopify_callback"),
 
 ]

@@ -744,12 +744,14 @@ def shopify_install(request):
     )
     return redirect(install_url)
 
+from django.http import HttpResponse
+
 def auth_callback(request):
     shop = request.GET.get("shop")
     code = request.GET.get("code")
 
-    if not code:
-        return JsonResponse({"error": "No code found"})
+    if not shop or not code:
+        return HttpResponse("Missing shop or code", status=400)
 
     token_url = f"https://{shop}/admin/oauth/access_token"
     payload = {
@@ -758,9 +760,12 @@ def auth_callback(request):
         "code": code,
     }
 
-    response = requests.post(token_url, json=payload)
-    data = response.json()
+    response = requests.post(token_url, data=payload)
+    
+    # DEBUG: print the raw response
+    print("STATUS CODE:", response.status_code)
+    print("HEADERS:", response.headers)
+    print("BODY:", response.text)
 
-    print("ACCESS TOKEN:", data)  # it will appear in your Render logs
-    return JsonResponse(data)
+    return HttpResponse("Check console for response details")
 

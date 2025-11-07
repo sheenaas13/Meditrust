@@ -726,46 +726,77 @@ def filter_articles(request, slug):
 
     return JsonResponse(data)
 
+import hmac
+import hashlib
+import json
 import requests
-import urllib.parse
+from urllib.parse import urlencode
 
-def shopify_install(request):
-    shop = request.GET.get("shop")
+from django.conf import settings
+from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseBadRequest
+
+
+# Step 1: Redirect user to Shopify to install the app
+def auth_start(request):
+    shop = request.GET.get('shop')
     if not shop:
-        return JsonResponse({"error": "Missing shop parameter"})
+        return HttpResponseBadRequest("Missing shop parameter.")
 
-    scopes = "read_products,write_products"
-    redirect_uri = "https://meditrust-1.onrender.com/auth/callback"
-    install_url = (
-        f"https://{shop}/admin/oauth/authorize?"
-        f"client_id={settings.SHOPIFY_API_KEY}"
-        f"&scope={urllib.parse.quote(scopes)}"
-        f"&redirect_uri={urllib.parse.quote(redirect_uri)}"
-    )
+    redirect_uri = settings.SHOPIFY_REDIRECT_URI  # e.g., https://meditrust-1.onrender.com/auth/callback
+    scopes = "write_inventory,read_inventory,write_orders,read_orders,read_products,write_products"
+    
+    install_url = f"https://{shop}/admin/oauth/authorize?{urlencode({'client_id': settings.SHOPIFY_API_KEY, 'scope': scopes, 'redirect_uri': redirect_uri, 'state': 'secure123', 'grant_options[]': 'per-user'})}"
+    
     return redirect(install_url)
 
-from django.http import HttpResponse
 
+# Step 2: Callback to get permanent access token
 def auth_callback(request):
-    shop = request.GET.get("shop")
-    code = request.GET.get("code")
+    shop = request.GET.get('shop')
+    code = request.GET.get('code')
+    hmac_param = request.GET.get('hmac')
+    state = request.GET.get('state')
 
-    if not shop or not code:
-        return HttpResponse("Missing shop or code", status=400)
+    if not shop or not code or not hmac_param:
+        return HttpResponseBadRequest("Missing parameters.")
 
+    # Validate HMAC
+    query_dict = request.GET.copy()
+    query_dict.pop('hmac', None)
+    message = "&".join([f"{k}={v}" for k, v in sorted(query_dict.items())])
+    computed_hmac = hmac.new(
+        bytes(settings.SHOPIFY_API_SECRET, 'utf-8'),
+        msg=bytes(message, 'utf-8'),
+        digestmod=hashlib.sha256
+    ).hexdigest()
+
+    if not hmac.compare_digest(computed_hmac, hmac_param):
+        return HttpResponseBadRequest("HMAC validation failed.")
+
+    # Exchange code for access token
     token_url = f"https://{shop}/admin/oauth/access_token"
     payload = {
         "client_id": settings.SHOPIFY_API_KEY,
         "client_secret": settings.SHOPIFY_API_SECRET,
-        "code": code,
+        "code": code
     }
 
-    response = requests.post(token_url, data=payload)
-    
-    # DEBUG: print the raw response
-    print("STATUS CODE:", response.status_code)
-    print("HEADERS:", response.headers)
-    print("BODY:", response.text)
+    try:
+        response = requests.post(token_url, data=payload, timeout=10)
+        response.raise_for_status()
+        token_data = response.json()
+    except requests.RequestException as e:
+        return HttpResponse(f"Error fetching access token: {str(e)}")
+    except json.JSONDecodeError:
+        return HttpResponse("Error decoding JSON from Shopify.")
 
-    return HttpResponse("Check console for response details")
+    access_token = token_data.get("access_token")
+    if not access_token:
+        return HttpResponse(f"No access token returned. Response: {token_data}")
+
+    # Save token securely (DB or encrypted .env)
+    # For now, just show it
+    return HttpResponse(f"Shop: {shop}<br>Access Token: {access_token}")
+
 

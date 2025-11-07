@@ -75,7 +75,7 @@ path('return', views.returnpolicy, name='return'),
 path('article/', views.article, name='article'),
 path('articles/filter/<slug:slug>/', views.filter_articles, name='filter_articles'),
 
-path("install/", views.shopify_install, name="shopify_install"),
-path("auth/callback", views.auth_callback, name="shopify_callback"),
+path('auth/start/', views.auth_start, name='auth_start'),
+path('auth/callback/', views.auth_callback, name='auth_callback'),
 
 ]

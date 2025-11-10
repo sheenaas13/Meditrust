@@ -157,10 +157,10 @@ LOGOUT_REDIRECT_URL = 'home'
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  
-
-import os
+load_dotenv()  # Loads the .env file
 
 SHOPIFY_API_KEY = os.getenv("SHOPIFY_API_KEY")
 SHOPIFY_API_SECRET = os.getenv("SHOPIFY_API_SECRET")
-SHOPIFY_REDIRECT_URI = "https://meditrust-1.onrender.com/auth/callback"
+SHOPIFY_STORE_URL = os.getenv("SHOPIFY_STORE_URL")
+SHOPIFY_REDIRECT_URI = os.getenv("SHOPIFY_REDIRECT_URI")
+

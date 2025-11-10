@@ -756,6 +756,18 @@ def auth_start(request):
     auth_url = f"https://{shop}/admin/oauth/authorize?" + urlencode(params)
     return redirect(auth_url)
 
+def auth_callback(request):
+    shop = request.GET.get("shop")
+    code = request.GET.get("code")
+
+    print("SHOP:", shop)
+    print("CODE:", code)
+    print("API_KEY:", settings.SHOPIFY_API_KEY)
+    print("API_SECRET:", settings.SHOPIFY_API_SECRET)
+
+    if not all([shop, code, settings.SHOPIFY_API_KEY, settings.SHOPIFY_API_SECRET]):
+        return HttpResponse("Missing required OAuth parameters.", status=400)
+
 
 # Step 2: Callback to get permanent access token
 def auth_callback(request):

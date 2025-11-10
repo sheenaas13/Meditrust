@@ -743,12 +743,18 @@ def auth_start(request):
     if not shop:
         return HttpResponseBadRequest("Missing shop parameter.")
 
-    redirect_uri = settings.SHOPIFY_REDIRECT_URI  # e.g., https://meditrust-1.onrender.com/auth/callback
-    scopes = "write_inventory,read_inventory,write_orders,read_orders,read_products,write_products"
-    
-    install_url = f"https://{shop}/admin/oauth/authorize?{urlencode({'client_id': settings.SHOPIFY_API_KEY, 'scope': scopes, 'redirect_uri': redirect_uri, 'state': 'secure123', 'grant_options[]': 'per-user'})}"
-    
-    return redirect(install_url)
+    redirect_uri = settings.SHOPIFY_REDIRECT_URI
+    scopes = "read_products,write_products,read_inventory,write_inventory,read_orders,write_orders"
+
+    params = {
+        "client_id": settings.SHOPIFY_API_KEY,
+        "scope": scopes,
+        "redirect_uri": redirect_uri,
+        "state": "secure123",
+    }
+
+    auth_url = f"https://{shop}/admin/oauth/authorize?" + urlencode(params)
+    return redirect(auth_url)
 
 
 # Step 2: Callback to get permanent access token

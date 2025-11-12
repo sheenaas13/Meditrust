@@ -1,196 +1,334 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}MediTrust - {{ product.name }}{% endblock %}
 
 {% block content %}
-<section class="product_detail-container">
-    <div class="product_detail-left">
-        <div class="product_detail-main-image">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-        </div>
-        <div class="product_detail-thumbnails">
-            {% if product.image2 %}
-            <img src="{{ product.image2.url }}" alt="{{ product.name }} - Image 2">
-            {% endif %}
-            {% if product.image3 %}
-            <img src="{{ product.image3.url }}" alt="{{ product.name }} - Image 3">
-            {% endif %}
-            {% if product.image4 %}
-            <img src="{{ product.image4.url }}" alt="{{ product.name }} - Image 4">
-            {% endif %}
-        </div>
-    </div>
+<section class="product-page">
+    <div class="product-container">
+        <!-- Left: Images -->
+        <div class="product-gallery">
+            <div class="thumbnail-list">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }} 1" class="thumb active">
+                {% endif %}
+                {% if product.image2 %}
+                <img src="{{ product.image2.url }}" alt="{{ product.name }} 2" class="thumb">
+                {% endif %}
+                {% if product.image3 %}
+                <img src="{{ product.image3.url }}" alt="{{ product.name }} 3" class="thumb">
+                {% endif %}
+                {% if product.image4 %}
+                <img src="{{ product.image4.url }}" alt="{{ product.name }} 4" class="thumb">
+                {% endif %}
+            </div>
 
-    <div class="product_detail-right">
-        <p class="product_detail-category">
-            {% for cat in product.categories.all %}{{ cat.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-        </p>
-        <h2 class="product_detail-title">{{ product.name }}</h2>
-
-        <div class="product_detail-price-section">
-            <span class="product_detail-price">₹{{ product.selling_price }}</span>
-            {% if product.mrp %}
-            <span class="product_detail-old-price">₹{{ product.mrp }}</span>
-            {% endif %}
-            {% if product.discount_percent %}
-            <span class="product_detail-discount">Save {{ product.discount_percent }}%</span>
-            {% endif %}
+            <div class="main-image">
+                <img id="mainImage" src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
         </div>
 
-        {% if product.stock > 0 %}
-        <p class="product_detail-availability">In Stock</p>
-        {% else %}
-        <p class="product_detail-availability out-of-stock">Out of Stock</p>
-        {% endif %}
 
-        <div class="product_detail-dosage">
-            {% if product.medicine_type == 'LIQUID' %}
-            <h4>Select Quantity</h4>
-            <div class="product_detail-dosage-options">
-                {% for option in product.quantity_options.all %}
-                <button class="product_detail-dosage-btn">{{ option.label }}</button>
-                {% empty %}
-                <p>No quantity options available for this product.</p>
+        <!-- Right: Product Info -->
+        <div class="product-info">
+            <p class="category">
+                {% for cat in product.categories.all %}
+                {{ cat.name }}{% if not forloop.last %}, {% endif %}
                 {% endfor %}
+            </p>
+
+            <h2 class="product-title">{{ product.name }}</h2>
+
+            <div class="price-section">
+                <span class="price">₹{{ product.selling_price }}</span>
+                {% if product.mrp %}
+                <span class="old-price">₹{{ product.mrp }}</span>
+                {% endif %}
+                {% if product.discount_percent %}
+                <span class="discount">Save {{ product.discount_percent }}%</span>
+                {% endif %}
+            </div>
+
+            {% if product.stock > 0 %}
+            <p class="availability in-stock">In Stock</p>
+            {% else %}
+            <p class="availability out-of-stock">Out of Stock</p>
+            {% endif %}
+
+            {% if product.medicine_type == 'LIQUID' %}
+            <div class="quantity-section">
+                <h4>Select Quantity</h4>
+                <div class="quantity-options">
+                    {% for option in product.quantity_options.all %}
+                    <button class="quantity-btn">{{ option.label }}</button>
+                    {% empty %}
+                    <p>No quantity options available for this product.</p>
+                    {% endfor %}
+                </div>
             </div>
             {% else %}
-            <h4>Pack Details</h4>
-            <p><strong>Pack:</strong> 1</p>
+            <!-- <div class="quantity-section">
+                <h4>Pack Details</h4>
+                <p><strong>Pack:</strong> 1</p>
+            </div> -->
             {% endif %}
-        </div>
 
-        <div class="product_detail-actions"
-            data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
-            data-login-url="{% url 'login' %}" data-current-url="{{ request.path }}">
+            <div class="offer-timer">
+                <h5>Hurry up! Offer ends in</h5>
+                <div id="countdown">
+                    <div><span id="days">02</span>
+                        <p>Days</p>
+                    </div>
+                    <div><span id="hours">06</span>
+                        <p>Hours</p>
+                    </div>
+                    <div><span id="minutes">47</span>
+                        <p>Minutes</p>
+                    </div>
+                    <div><span id="seconds">27</span>
+                        <p>Seconds</p>
+                    </div>
+                </div>
+            </div>
 
-            <button class="product_detail-add-btn" data-product-id="{{ product.id }}" onclick="handleWishlist(this)">
-                Add to Wishlist
-            </button>
+            <div class="action-section" data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
+                data-login-url="{% url 'login' %}" data-current-url="{{ request.path }}">
 
-            <button class="product_detail-buy-btn" data-product-id="{{ product.id }}" onclick="handleCart(this)">
-                Add to Cart
-            </button>
-        </div>
+                <!-- Select Quantity -->
+                <div class="product-option">
+                    <h4 class="section-title">Select Quantity</h4>
+                    <div class="quantity-options">
+                        <label>
+                            <input type="radio" name="product-size" value="350g" checked>
+                            350 g
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="500g">
+                            500 g
+                        </label>
+                    </div>
+                </div>
 
-        <div class="product_detail-description">
-            <h4>Description</h4>
-            <p>{{ product.description }}</p>
-            {% if product.description2 %}
-            <p>{{ product.description2 }}</p>
-            {% endif %}
-        </div>
+                <!-- Quantity Increment -->
+                <div class="product-quantity">
+                    <h4 class="section-title">Quantity</h4>
+                    <div class="quantity-control">
+                        <button class="qty-btn" id="decreaseQty">−</button>
+                        <input type="number" id="productQty" value="1" min="1">
+                        <button class="qty-btn" id="increaseQty">+</button>
+                        <button class="add-cart" data-product-id="{{ product.id }}" onclick="handleCart(this)"> Add to
+                            Cart</button>
+                    </div>
+                </div>
 
-        <div class="product_detail-shipping">
-            <h4>Shipping Information</h4>
-            <ul>
-                <li><strong>Discount:</strong> {{ product.discount_percent }}% OFF</li>
-                <li><strong>Delivery Time:</strong> 2-5 Working Days</li>
-                <li><strong>Package Type:</strong> Sealed Medical Pack</li>
-            </ul>
+                <!-- Buy Now -->
+                <button class="buy-now">Buy it Now</button>
+            </div>
+
+
+            <div class="delivery-info">
+                <div class="delivery-section">
+                    <h4><i class="fa-solid fa-truck"></i> Expected delivery date:</h4>
+                    <p>20 Nov • Usually ready in 2-3 days.</p>
+                </div>
+                <hr>
+                <div class="pickup-section">
+                    <h4><i class="fa-solid fa-location-dot"></i> Pickup available at:</h4>
+                    <p>41, Peabody str. Nashville TN 37210, United States.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
-<section class="product_detail-reviews">
-    <h3>Customer Ratings & Reviews</h3>
-    <div class="reviews-container">
-        <div class="overall-rating">
-            <h1>{{ product.rating|default:"4.5" }}</h1>
-            <p>out of 5</p>
-        </div>
+<!-- Product Specification Accordion -->
+<section class="product-specs">
+    <div class="specs-left">
+        <h2 class="specs-heading">Product Specifications</h2>
 
-        <div class="rating-breakdown">
-            {% for star, percent in product.rating_distribution_list %}
-            <div class="rating-bar-row">
-                <span class="star-label">⭐ {{ star }}</span>
-                <div class="rating-bar" data-percent="{{ percent }}">
-                    <div class="rating-fill"></div>
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-btn">Details <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>{{ product.description }}</p>
                 </div>
-                <span class="percentage">{{ percent }}%</span>
             </div>
-            {% endfor %}
+
+            <div class="accordion-item">
+                <button class="accordion-btn">Benefits <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>{{ product.benefits|default:"Improves hydration and energy levels." }}</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-btn">How to use <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>{{ product.usage|default:"Mix one scoop with water daily or as directed." }}</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-btn">Ingredients <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>{{ product.ingredients|default:"Electrolytes, natural flavors, glucose, minerals." }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="specs-right">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    </div>
+</section>
+
+<!-- FAQ + Reviews -->
+<section class="faq-reviews">
+    <!-- Left: FAQs -->
+    <div class="faq-section">
+        <h2 class="faq-heading">Frequently Asked Questions</h2>
+        <div class="accordion faq-accordion">
+            <div class="accordion-item">
+                <button class="accordion-btn">What makes Mediva supplements different from others? <i
+                        class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>Mediva supplements are made with clean, science-backed ingredients and no unnecessary fillers.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-btn">Are your supplements safe to take every day? <i
+                        class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>Yes, they’re safe for daily use and formulated with high-quality, natural ingredients.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-btn">Do you offer international shipping? <i
+                        class="fa-solid fa-chevron-down"></i></button>
+                <div class="accordion-content">
+                    <p>Yes, we ship globally so everyone can enjoy Mediva’s quality supplements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Reviews -->
+    <div class="review-section">
+        <h2 class="review-heading">Customer Reviews</h2>
+        <div class="review-card">
+            <p class="review-stars">⭐️⭐️⭐️⭐️☆</p>
+            <p class="review-text">“I’ve tried a lot of brands, but Mediva is the first that actually helped with my
+                fatigue.”</p>
+            <img src="/static/img/default-user.png" alt="User" class="review-user">
+            <p class="review-name">— Sarah L.</p>
         </div>
 
-        <div class="reviews-list">
-            {% for review in product.reviews.all %}
-            <div class="review-item">
-                <strong class="review-user-name">{{ review.user_name }}</strong>
-                <div class="review-stars">⭐ {{ review.rating }} stars</div>
-                <p class="review-comment">{{ review.comment }}</p>
-                {% if review.user_image %}
-                <img src="{{ review.user_image.url }}" alt="{{ review.user_name }}" class="review-user-image">
-                {% else %}
-                <img src="/static/img/default-user.png" alt="{{ review.user_name }}" class="review-user-image">
-                {% endif %}
-            </div>
-            {% empty %}
-            <p>No reviews yet. Be the first to review this product!</p>
-            {% endfor %}
+        <div class="review-card">
+            <p class="review-stars">⭐️⭐️⭐️⭐️⭐️</p>
+            <p class="review-text">“Absolutely love it! My energy levels are so much better now.”</p>
+            <img src="/static/img/default-user.png" alt="User" class="review-user">
+            <p class="review-name">— Kevin M.</p>
         </div>
     </div>
 </section>
 
-<section class="careplan-section5-section">
-    <div class="container">
-        <h2>You Might Also Like</h2>
-
-        <div class="careplan-section5-grid">
-            {% for product in products %}
-            <div class="careplan-section5-box">
-                <div class="careplan-section5-icons">
-                    <i class="fas fa-heart careplan-section5-save {% if product.id in wishlist_products %}saved{% endif %}"
-                        data-product-id="{{ product.id }}" onclick="toggleWishlist(this)">
-                    </i>
-                    <i class="fas fa-shopping-cart careplan-section5-cart" data-product-id="{{ product.id }}"
-                        onclick="addToCart(this)">
-                    </i>
-                </div>
-                {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                {% else %}
-                <img src="/static/img/default-product.jpg" alt="{{ product.name }}">
-                {% endif %}
-
-                <h3 class="careplan-section5-name">{{ product.name|truncatewords:3 }}</h3>
-                <p class="careplan-section5-price">₹{{ product.mrp }}</p>
-                <a href="{% url 'product_detail' product.id %}" class="careplan-section5-button">View Product</a>
-            </div>
-            {% endfor %}
+<!-- You Might Also Like -->
+<section class="related-products">
+    <h2>You Might Also Like</h2>
+    <div class="related-grid">
+        {% for product in products %}
+        <div class="related-card">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+            <h3>{{ product.name|truncatewords:3 }}</h3>
+            <p>₹{{ product.mrp }}</p>
+            <a href="{% url 'product_detail' product.id %}" class="view-btn">View Product</a>
         </div>
+        {% endfor %}
     </div>
 </section>
 
 <script>
-    function handleWishlist(button) {
-        const container = button.closest('.product_detail-actions');
-        const isAuthenticated = container.dataset.isAuthenticated === 'true';
-        const loginUrl = container.dataset.loginUrl;
-        const currentUrl = container.dataset.currentUrl;
+    const thumbnails = document.querySelectorAll('.thumb');
+    const mainImage = document.getElementById('mainImage');
 
-        if (!isAuthenticated) {
-            window.location.href = `${loginUrl}?next=${encodeURIComponent(currentUrl)}`;
-            return;
-        }
+    thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            // Remove 'active' from all thumbnails
+            thumbnails.forEach(t => t.classList.remove('active'));
 
-        // if logged in
-        toggleWishlist(button);
-    }
+            // Add 'active' to clicked thumbnail
+            thumb.classList.add('active');
 
-    function handleCart(button) {
-        const container = button.closest('.product_detail-actions');
-        const isAuthenticated = container.dataset.isAuthenticated === 'true';
-        const loginUrl = container.dataset.loginUrl;
-        const currentUrl = container.dataset.currentUrl;
-
-        if (!isAuthenticated) {
-            window.location.href = `${loginUrl}?next=${encodeURIComponent(currentUrl)}`;
-            return;
-        }
-
-        // if logged in
-        addToCart(button);
-    }
+            // Update main image
+            mainImage.style.opacity = '0';
+            setTimeout(() => {
+                mainImage.src = thumb.src;
+                mainImage.style.opacity = '1';
+            }, 200);
+        });
+    });
 </script>
 
+<script>
+    const accButtons = document.querySelectorAll(".accordion-btn");
+
+    accButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const content = btn.nextElementSibling;
+
+            // Close others
+            document.querySelectorAll(".accordion-content").forEach(item => {
+                if (item !== content) {
+                    item.style.maxHeight = null;
+                    item.previousElementSibling.classList.remove("active");
+                    item.classList.remove("open");
+                }
+            });
+
+            // Toggle
+            btn.classList.toggle("active");
+
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove("open");
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.add("open");
+            }
+        });
+    });
+</script>
+
+<script>
+    const faqBtns = document.querySelectorAll(".faq-accordion .accordion-btn");
+
+    faqBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const content = btn.nextElementSibling;
+
+            document.querySelectorAll(".faq-accordion .accordion-content").forEach(item => {
+                if (item !== content) {
+                    item.style.maxHeight = null;
+                    item.previousElementSibling.classList.remove("active");
+                    item.classList.remove("open");
+                }
+            });
+
+            btn.classList.toggle("active");
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove("open");
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.add("open");
+            }
+        });
+    });
+</script>
 
 {% endblock %}

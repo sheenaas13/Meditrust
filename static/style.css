@@ -6322,7 +6322,7 @@ body {
 }
 
 #productQty {
-  width: 60px;
+  width: 247px;
   text-align: center;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -6579,14 +6579,19 @@ body {
 }
 
 .faq-accordion .accordion-content p {
-  color: #dfeff2;
+  color: #000;
   font-size: 0.97rem;
   line-height: 1.6;
-  margin: 15px 0;
+  margin: 0px 0;
 }
 
 .faq-accordion .accordion-content.open {
   padding: 15px 22px;
+
+}
+
+.accordion-content.open {
+  max-height: 94px !important;
 }
 
 /* Right: Review Section */
@@ -8160,6 +8165,36 @@ html {
   width: 475px;
   padding-bottom: 24px;
 }
+
+#countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+#countdown .time-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+}
+
+#countdown .time-box span {
+  font-size: 24px;
+  color: #e63946;
+  font-weight: bold;
+}
+
+#countdown .colon {
+  font-size: 22px;
+  color: #555;
+  font-weight: bold;
+  margin: 0 2px;
+}
+
 
 @media (max-width: 768px) {
   .articles-hero-section {

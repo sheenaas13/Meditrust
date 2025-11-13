@@ -444,17 +444,37 @@ def product_detail(request, id):
 @login_required(login_url='login')
 def checkout(request):
     user = request.user
-    cart_items = Cart.objects.filter(user=user)
+    product_id = request.GET.get('product_id')
+    product = None
+    cart_items = None
+    subtotal = 0
+    discount = 0
 
-    if not cart_items.exists():
-        return redirect('cart_page')
+    if product_id:  
+        # 🩷 Case 1: Coming from "Buy it Now" for a single product
+        try:
+            product = Product.objects.get(id=product_id)
+            quantity = int(request.GET.get('qty', 1))
+            subtotal = product.selling_price * quantity
+            if product.mrp and product.mrp > product.selling_price:
+                discount = (product.mrp - product.selling_price) * quantity
+            total = subtotal
+        except Product.DoesNotExist:
+            return redirect('home')
 
-    subtotal = sum(item.total_price for item in cart_items)
-    discount = sum(
-        (item.product.mrp - item.product.selling_price) * item.quantity
-        for item in cart_items if item.product.mrp > item.product.selling_price
-    )
-    total = subtotal  
+    else:
+        # 🛒 Case 2: Coming from Cart Page
+        cart_items = Cart.objects.filter(user=user)
+        if not cart_items.exists():
+            return redirect('cart_page')
+        subtotal = sum(item.total_price for item in cart_items)
+        discount = sum(
+            (item.product.mrp - item.product.selling_price) * item.quantity
+            for item in cart_items if item.product.mrp > item.product.selling_price
+        )
+        total = subtotal
+
+    # Razorpay setup
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     razorpay_order = client.order.create({
         "amount": int(total * 100),
@@ -469,9 +489,11 @@ def checkout(request):
         'discount': discount,
         'total': total,
         'razorpay_key': settings.RAZORPAY_KEY_ID,
+        'product': product,
         'razorpay_order_id': razorpay_order['id'],
     }
     return render(request, 'checkout.html', context)
+
 
 @login_required(login_url='login')
 def payment_success(request):

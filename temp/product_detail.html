@@ -97,14 +97,64 @@
                 <div class="product-option">
                     <h4 class="section-title">Select Quantity</h4>
                     <div class="quantity-options">
+                        {% if product.medicine_type == "LIQUID" or product.medicine_type == "SYRUP" %}
                         <label>
-                            <input type="radio" name="product-size" value="350g" checked>
-                            350 g
+                            <input type="radio" name="product-size" value="100ml" checked>
+                            100 ml
                         </label>
                         <label>
-                            <input type="radio" name="product-size" value="500g">
-                            500 g
+                            <input type="radio" name="product-size" value="250ml">
+                            250 ml
                         </label>
+                        <label>
+                            <input type="radio" name="product-size" value="500ml">
+                            500 ml
+                        </label>
+                        {% elif product.medicine_type == "TABLET" or product.medicine_type == "CAPSULE" %}
+                        <label>
+                            <input type="radio" name="product-size" value="10pcs" checked>
+                            10 pcs
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="20pcs">
+                            20 pcs
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="30pcs">
+                            30 pcs
+                        </label>
+                        {% elif product.medicine_type == "CREAM" %}
+                        <label>
+                            <input type="radio" name="product-size" value="30g" checked>
+                            30 g
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="50g">
+                            50 g
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="100g">
+                            100 g
+                        </label>
+                        {% elif product.medicine_type == "INJECTION" %}
+                        <label>
+                            <input type="radio" name="product-size" value="1vial" checked>
+                            1 vial
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="2vials">
+                            2 vials
+                        </label>
+                        {% else %}
+                        <label>
+                            <input type="radio" name="product-size" value="100g" checked>
+                            100 g
+                        </label>
+                        <label>
+                            <input type="radio" name="product-size" value="250g">
+                            250 g
+                        </label>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -112,16 +162,21 @@
                 <div class="product-quantity">
                     <h4 class="section-title">Quantity</h4>
                     <div class="quantity-control">
-                        <button class="qty-btn" id="decreaseQty">−</button>
+                        <!-- <button class="qty-btn" id="decreaseQty">−</button> -->
                         <input type="number" id="productQty" value="1" min="1">
-                        <button class="qty-btn" id="increaseQty">+</button>
-                        <button class="add-cart" data-product-id="{{ product.id }}" onclick="handleCart(this)"> Add to
+                        <!-- <button class="qty-btn" id="increaseQty">+</button> -->
+                        <button class="add-cart" data-product-id="{{ product.id }}" onclick="addToCart(this)"> Add to
                             Cart</button>
                     </div>
                 </div>
 
                 <!-- Buy Now -->
-                <button class="buy-now">Buy it Now</button>
+                <button class="buy-now"
+                    onclick="window.location.href='/checkout?product_id={{ product.id }}&qty=' + document.getElementById('productQty').value">
+                    Buy it Now
+                </button>
+
+
             </div>
 
 
@@ -275,60 +330,80 @@
 </script>
 
 <script>
-    const accButtons = document.querySelectorAll(".accordion-btn");
+    // Set your offer end date (example: 3 days from now)
+    const offerEndDate = new Date();
+    offerEndDate.setDate(offerEndDate.getDate() + 3); // 3 days from now
 
-    accButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const content = btn.nextElementSibling;
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = offerEndDate - now;
 
-            // Close others
-            document.querySelectorAll(".accordion-content").forEach(item => {
-                if (item !== content) {
-                    item.style.maxHeight = null;
-                    item.previousElementSibling.classList.remove("active");
-                    item.classList.remove("open");
-                }
-            });
+        const countdownContainer = document.getElementById("countdown");
 
-            // Toggle
-            btn.classList.toggle("active");
+        if (distance <= 0) {
+            countdownContainer.innerHTML = "<p>Offer has ended 😢</p>";
+            clearInterval(timerInterval);
+            return;
+        }
 
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                content.classList.remove("open");
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                content.classList.add("open");
-            }
-        });
-    });
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownContainer.innerHTML = `
+            <div class="time-box"><span>${String(days).padStart(2, '0')}</span><p>Days</p></div>
+            <span class="colon">:</span>
+            <div class="time-box"><span>${String(hours).padStart(2, '0')}</span><p>Hours</p></div>
+            <span class="colon">:</span>
+            <div class="time-box"><span>${String(minutes).padStart(2, '0')}</span><p>Minutes</p></div>
+            <span class="colon">:</span>
+            <div class="time-box"><span>${String(seconds).padStart(2, '0')}</span><p>Seconds</p></div>
+        `;
+    }
+
+    // Update every second
+    const timerInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
 </script>
 
 <script>
-    const faqBtns = document.querySelectorAll(".faq-accordion .accordion-btn");
+    // Generic accordion handler
+    function setupAccordion(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
 
-    faqBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const content = btn.nextElementSibling;
+        const buttons = container.querySelectorAll(".accordion-btn");
 
-            document.querySelectorAll(".faq-accordion .accordion-content").forEach(item => {
-                if (item !== content) {
-                    item.style.maxHeight = null;
-                    item.previousElementSibling.classList.remove("active");
-                    item.classList.remove("open");
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const content = btn.nextElementSibling;
+
+                // Close others in same container
+                container.querySelectorAll(".accordion-content").forEach(item => {
+                    if (item !== content) {
+                        item.style.maxHeight = null;
+                        item.previousElementSibling.classList.remove("active");
+                        item.classList.remove("open");
+                    }
+                });
+
+                // Toggle current one
+                btn.classList.toggle("active");
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.classList.remove("open");
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.classList.add("open");
                 }
             });
-
-            btn.classList.toggle("active");
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                content.classList.remove("open");
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                content.classList.add("open");
-            }
         });
-    });
+    }
+
+    // Initialize both accordions separately
+    setupAccordion(".accordion");       // For Product Specifications
+    setupAccordion(".faq-accordion");   // For FAQ section
 </script>
 
 {% endblock %}

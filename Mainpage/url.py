@@ -34,6 +34,7 @@ path('cart/update/<int:item_id>/', views.update_cart_quantity, name='update_cart
 path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
 path('product/<int:id>/', views.product_detail, name='product_detail'),
 path('checkout', views.checkout, name='checkout'),
+path('checkout/<int:product_id>/', views.checkout, name='checkout'),
 path('payment-success/', views.payment_success, name='payment_success'),
 path('profile/orders/', views.ordered_items_view, name='ordered_items'),
 path("service/<int:service_id>/book/", views.book_service_payment, name="service_booking"),

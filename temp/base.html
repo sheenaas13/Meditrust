@@ -5,6 +5,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Page Title{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -19,79 +20,64 @@
 <body>
   <!-- Header -->
   <header>
+
     <!-- Logo -->
     <div class="header-logo">
       <a href="{% url 'home' %}">
         <img src="/static/img/logo.png" alt="Midiset Logo" />
       </a>
     </div>
-    <nav class="header-nav-links">
+
+    <!-- DESKTOP NAV (unchanged) -->
+    <nav class="header-nav-links desktop-nav">
       <ul>
         <li>
-          <a href="#">Medicines
-            <i class="fas fa-caret-down arrow"></i>
-          </a>
-          <ul class="dropdown Med-dropdown">
+          <a href="#">Medicines <i class="fas fa-caret-down arrow"></i></a>
+          <ul class="Med-dropdown dropdown">
             {% for category in categories %}
-            <li>
-              <a href="{% url 'product_list' %}?category={{ category.id }}">
-                {{ category.name }}
-              </a>
-            </li>
-            {% empty %}
-            <li><a href="#">No categories available</a></li>
+            <li><a href="{% url 'product_list' %}?category={{ category.id }}">{{ category.name }}</a></li>
             {% endfor %}
           </ul>
         </li>
+
         <li>
-          <a href="{% url 'labtest' %}">Lab Test
-            <i class="fas fa-caret-down arrow"></i>
-          </a>
-          <ul class="Lab-dropdown dropdown">
+          <a href="{% url 'labtest' %}">Lab Test <i class="fas fa-caret-down arrow"></i></a>
+          <ul class="dropdown Lab-dropdown">
             {% for service in pharmacy_services %}
-            <li>
-              <a href=''>{{ service.name }}</a>
-            </li>
-            {% empty %}
-            <li><a href="#">No services available</a></li>
+            <li><a href="">{{ service.name }}</a></li>
             {% endfor %}
           </ul>
         </li>
+
         <li>
-          <a href="{% url 'consultdoc' %}">Consult Doctors
-            <i class="fas fa-caret-down arrow"></i></a>
+          <a href="{% url 'consultdoc' %}">Consult Doctors <i class="fas fa-caret-down arrow"></i></a>
           <ul class="dropdown">
             <li><a href="#">Online</a></li>
             <li><a href="#">In Clinic</a></li>
           </ul>
         </li>
-        <li>
-          <a href="{% url 'cancercare' %}">Cancer Care</a>
-        </li>
-        <li>
-          <a href="{% url 'ayurveda' %}">Ayurveda
-            <i class="fas fa-caret-down arrow"></i></a>
+
+        <li><a href="{% url 'cancercare' %}">Cancer Care</a></li>
+        <li><a href="{% url 'ayurveda' %}">Ayurveda <i class="fas fa-caret-down arrow"></i></a>
           <ul class="dropdown">
             <li><a href="{% url 'product_list' %}?category=27">Herbal Products</a></li>
           </ul>
         </li>
-        <li>
-          <a href="{% url 'partnership' %}">Partnership</a>
-        </li>
-        <li>
-          <a href="{% url 'careplan' %}">Care Plan</a>
-        </li>
+
+        <li><a href="{% url 'partnership' %}">Partnership</a></li>
+        <li><a href="{% url 'careplan' %}">Care Plan</a></li>
       </ul>
     </nav>
-    
-    <!-- Icons -->
-    <div class="header-icons">
+
+    <!-- DESKTOP ICONS (unchanged) -->
+    <div class="header-icons desktop-icons">
+
       <div class="user-dropdown">
         <i class="fas fa-user"></i>
         <ul class="user-menu">
           {% if user.is_authenticated %}
           <li>
-            <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+            <form method="POST" action="{% url 'logout' %}">
               {% csrf_token %}
               <button type="submit" class="logout-btn">Logout</button>
             </form>
@@ -103,23 +89,142 @@
           {% endif %}
         </ul>
       </div>
+
       <a href="{% url 'wishlist' %}" class="wishlist-icon">
-        <i class="fas fa-heart" title="Wishlist"></i>
+        <i class="fas fa-heart"></i>
         {% if wishlist_count > 0 %}
         <span class="wishlist-count">{{ wishlist_count }}</span>
         {% endif %}
       </a>
 
       <a href="{% url 'cart' %}" class="cart-icon">
-        <i class="fas fa-shopping-cart" title="Cart"></i>
+        <i class="fas fa-shopping-cart"></i>
         {% if cart_count > 0 %}
         <span class="cart-count">{{ cart_count }}</span>
         {% endif %}
       </a>
-      <i class="fas fa-location-dot" title="Location"></i>
+
+      <i class="fas fa-location-dot"></i>
     </div>
 
+    <!-- MOBILE TOGGLER -->
+    <div class="mobile-toggle" id="mobileToggle">
+      <span></span><span></span><span></span>
+    </div>
+
+    <nav class="mobile-slide-menu" id="mobileMenu">
+
+      <!-- MOBILE NAVIGATION -->
+      <ul class="mobile-nav-list">
+
+        <!-- Medicines -->
+        <li class="mobile-dropdown-item">
+          <button class="mobile-dropdown-toggle">
+            Medicines <i class="fas fa-caret-down"></i>
+          </button>
+          <ul class="mobile-dropdown">
+            {% for category in categories %}
+            <li><a href="{% url 'product_list' %}?category={{ category.id }}">{{ category.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+
+        <!-- Lab Test -->
+        <li class="mobile-dropdown-item">
+          <button class="mobile-dropdown-toggle">
+            Lab Test <i class="fas fa-caret-down"></i>
+          </button>
+          <ul class="mobile-dropdown">
+            {% for service in pharmacy_services %}
+            <li><a href="">{{ service.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+
+        <!-- Consult Doctors -->
+        <li class="mobile-dropdown-item">
+          <button class="mobile-dropdown-toggle">
+            Consult Doctors <i class="fas fa-caret-down"></i>
+          </button>
+          <ul class="mobile-dropdown">
+            <li><a href="#">Online</a></li>
+            <li><a href="#">In Clinic</a></li>
+          </ul>
+        </li>
+
+        <!-- Cancer Care -->
+        <li><a href="{% url 'cancercare' %}">Cancer Care</a></li>
+
+        <!-- Ayurveda -->
+        <li class="mobile-dropdown-item">
+          <button class="mobile-dropdown-toggle">
+            Ayurveda <i class="fas fa-caret-down"></i>
+          </button>
+          <ul class="mobile-dropdown">
+            <li><a href="{% url 'product_list' %}?category=27">Herbal Products</a></li>
+          </ul>
+        </li>
+
+        <!-- Others -->
+        <li><a href="{% url 'partnership' %}">Partnership</a></li>
+        <li><a href="{% url 'careplan' %}">Care Plan</a></li>
+
+      </ul>
+
+      <!-- MOBILE ICONS WITH LINKS AND COUNTS -->
+      <div class="mobile-icons">
+
+        <!-- USER -->
+        <div class="mobile-user">
+          <button class="mobile-user-toggle">
+            <i class="fas fa-user"></i>
+            <i class="fas fa-caret-down"></i>
+          </button>
+
+          <ul class="mobile-user-menu">
+            {% if user.is_authenticated %}
+            <li>
+              <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+              </form>
+            </li>
+            <li><a href="{% url 'profile' %}">My Profile</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+
+        <!-- Wishlist -->
+        <a href="{% url 'wishlist' %}" class="mobile-wishlist">
+          <i class="fas fa-heart"></i>
+          {% if wishlist_count > 0 %}
+          <span class="wishlist-count">{{ wishlist_count }}</span>
+          {% endif %}
+        </a>
+
+        <!-- Cart -->
+        <a href="{% url 'cart' %}" class="mobile-cart">
+          <i class="fas fa-shopping-cart"></i>
+          {% if cart_count > 0 %}
+          <span class="cart-count">{{ cart_count }}</span>
+          {% endif %}
+        </a>
+
+        <!-- Location -->
+        <a href="#" class="mobile-location">
+          <i class="fas fa-location-dot"></i>
+        </a>
+
+      </div>
+
+    </nav>
+
   </header>
+
 
   <!-- Main content -->
   <main>
@@ -759,6 +864,93 @@
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <!-- <script>
+    // toggle mobile menu
+    const toggleBtn = document.getElementById("mobileToggle");
+    const menu = document.getElementById("mobileMenu");
+
+    toggleBtn.addEventListener("click", () => {
+      menu.classList.toggle("show");
+      toggleBtn.classList.toggle("active");
+    });
+
+    // mobile dropdowns
+    document.querySelectorAll(".header-nav-links > ul > li > a").forEach(link => {
+      link.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768) {
+          const parentLi = link.parentElement;
+          if (parentLi.querySelector(".dropdown")) {
+            e.preventDefault();
+            parentLi.classList.toggle("open");
+          }
+        }
+      });
+    });
+  </script>
+
+  <script>
+    const mobileToggleBtn = document.getElementById("mobileToggle");
+    const mobileSlideMenu = document.getElementById("mobileMenu");
+
+    mobileToggleBtn.addEventListener("click", () => {
+      mobileSlideMenu.classList.toggle("active");
+    });
+  </script> -->
+
+  <script>
+    (function () {
+      const mobileToggleBtn = document.getElementById('mobileToggle');
+      const mobileSlideMenuEl = document.getElementById('mobileMenu');
+
+      if (!mobileToggleBtn || !mobileSlideMenuEl) return;
+
+      // open/close panel
+      mobileToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileSlideMenuEl.classList.toggle('mobile--open');
+        mobileToggleBtn.classList.toggle('active');
+      });
+
+      // close when clicking outside the menu
+      document.addEventListener('click', (e) => {
+        // if click is outside menu and outside toggle button -> close
+        if (!mobileSlideMenuEl.contains(e.target) && !mobileToggleBtn.contains(e.target)) {
+          mobileSlideMenuEl.classList.remove('mobile--open');
+          mobileToggleBtn.classList.remove('active');
+          // also close any opened mobile dropdowns
+          document.querySelectorAll('#mobileMenu .mobile-nav-list > li.mobile--open')
+            .forEach(li => li.classList.remove('mobile--open'));
+        }
+      });
+
+      // dropdown toggles inside mobile menu
+      document.querySelectorAll('#mobileMenu .mobile-nav-list > li').forEach(li => {
+        const link = li.querySelector('a');
+        const btn = li.querySelector('button.mobile-dropdown-toggle');
+        const toggler = btn || link;
+
+        if (!toggler) return;
+
+        // if there is a nested dropdown show toggle behaviour
+        const nested = li.querySelector('.mobile-dropdown');
+        if (nested) {
+          toggler.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            li.classList.toggle('mobile--open');
+          });
+        }
+      });
+
+      // prevent closing when clicking inside the menu
+      mobileSlideMenuEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+
+    })();
+  </script>
+
 
 </body>
 

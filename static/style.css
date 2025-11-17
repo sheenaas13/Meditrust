@@ -8427,7 +8427,7 @@ html {
 
   .wishlist-count {
     top: 522px;
-    right: 128px;
+    right: 193px;
   }
 
   .mobile-slide-menu .mobile-icons {
@@ -8437,9 +8437,20 @@ html {
     gap: 25px;
   }
 
+  .mobile-dropdown {
+    z-index: 5;
+    position: relative;
+  }
+
+  .mobile-dropdown a {
+    text-decoration: none;
+    color: #555;
+
+  }
+
   .cart-count {
     top: 521px;
-    right: 79px;
+    right: 144px;
   }
 
   header {
@@ -8486,6 +8497,7 @@ html {
   .banner-home1-section {
     flex-direction: column;
     text-align: center;
+    margin: 0px -109px 23px 17px;
   }
 
   .banner-home1-image {
@@ -8495,11 +8507,6 @@ html {
   .banner-home2-card {
     flex: 1 1 45%;
     margin-bottom: 20px;
-  }
-
-  .musthave-product-card {
-    flex: 0 0 100%;
-    /* 1 per row on mobile */
   }
 
   .petcare-product-card {
@@ -8742,14 +8749,19 @@ html {
 
   .product-listing-main {
     flex-direction: column;
+    height: calc(322vh - 100px);
   }
 
   .product-listing-sidebar {
     width: 100%;
     position: relative;
-    height: auto;
+    height: 46vh;
     top: 0;
-    left: 0;
+    left: 636px;
+  }
+
+  .product-listing-card {
+    height: 45vh;
   }
 
   .product-listing-grid {
@@ -8932,6 +8944,220 @@ html {
     padding: 15px 0 !important;
     line-height: 1.6;
     text-align: center !important;
+  }
+
+  .mobile-slide-menu .mobile-user {
+    margin-top: -10px;
+  }
+
+  .promo-section {
+    height: 44vh;
+  }
+
+  .promo-section h1 {
+    font-size: 2em;
+  }
+
+  .search-container input {
+    width: 67%;
+  }
+
+  .type-med {
+    padding: 0px 20px;
+  }
+
+  .sec4-categories {
+    padding: 36px 20px;
+  }
+
+  .sec4-categories .grid {
+    display: grid;
+    grid-auto-flow: column;
+    /* forces items to line up horizontally */
+    grid-auto-columns: 1fr;
+    /* width of each grid item */
+    overflow-x: auto;
+    /* allows horizontal scroll */
+    overflow-y: hidden;
+    /* prevent vertical scroll */
+    scroll-behavior: smooth;
+    gap: 5px;
+  }
+
+  .top-saver-section {
+    width: 100%;
+    padding: 30px 20px;
+    /* margin: auto; */
+    height: 151vh;
+  }
+
+  .top-saver-products-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .top-saver-product-card {
+    background: #fff;
+    border-radius: 10px;
+    height: 43vh;
+    width: 219px;
+  }
+
+  .banner-home2-content {
+    position: absolute;
+    top: 54%;
+    left: 38%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    color: white;
+    z-index: 1;
+    padding: 0 0px;
+  }
+
+  .banner-home2-content p {
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+
+  .banner-home2-section {
+    padding: 0px 20px;
+  }
+
+  .musthave-sectionname {
+    width: 100%;
+    height: 178vh;
+    margin: 50px auto;
+    padding: 0 20px;
+  }
+
+  .musthave-products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 17px;
+    height: 40vh;
+  }
+
+  .musthave-products-grid .product {
+    flex: 0 0 calc(50% - 17px);
+  }
+
+  .musthave-product-card {
+    height: 51vh;
+    flex: 0 0 calc(51% - 16px);
+  }
+
+  .banner-home3-section {
+    margin: 351px 21px 14px 21px;
+  }
+
+  .petcare-product-link {
+    text-decoration: none;
+    color: black;
+    width: 220px;
+  }
+
+  .Inminutes-sectionname {
+    padding: 18px 20px;
+  }
+
+  .Inminutes-product-card {
+    padding: 15px;
+  }
+
+  .Inminutes-product-card img {
+    max-width: 100%;
+    height: 25vh;
+  }
+
+  .Inminutes-products-grid {
+    gap: 15px;
+  }
+
+  .footer {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .footer>div {
+    flex: 0 0 48%; 
+  }
+
+  .col-brand {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .social-row {
+    display: flex;
+    gap: 10px;
+    margin-top: -10px;
+    margin-bottom: 31px;
+  }
+
+  .col {
+    min-width: 77px;
+    text-align: center;
+  }
+
+  iframe {
+    height: 202px;
+    width: 400px;
+  }
+
+  .search-container button {
+    position: absolute;
+    right: 107px;
+  }
+
+  .product-listing-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .product-listing-search input {
+    margin-bottom: 11px;
+    width: 390px;
+  }
+
+  .product-gallery {
+    display: flex;
+    width: 100%;
+    height: 70vh;
+    align-items: flex-start;
+    gap: 30px;
+  }
+
+  .thumbnail-list {
+    display: flex;
+    height: 85vh;
+    width: 14vh;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .thumbnail-list img {
+    width: 17vh;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: 69vh;
+  }
+
+  .main-image {
+    flex: 1;
+    width: 543px;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .offer-timer {
+    width: 46vh;
   }
 
 }

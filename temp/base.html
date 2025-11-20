@@ -131,7 +131,7 @@
 
         <!-- Lab Test -->
         <li class="mobile-dropdown-item">
-          <button class="mobile-dropdown-toggle">
+          <button class="mobile-dropdown-toggle" onclick="window.location.href='/labtest'">
             Lab Test <i class="fas fa-caret-down"></i>
           </button>
           <ul class="mobile-dropdown">
@@ -143,7 +143,7 @@
 
         <!-- Consult Doctors -->
         <li class="mobile-dropdown-item">
-          <button class="mobile-dropdown-toggle">
+          <button class="mobile-dropdown-toggle"  onclick="window.location.href='/consultdoc'">
             Consult Doctors <i class="fas fa-caret-down"></i>
           </button>
           <ul class="mobile-dropdown">
@@ -157,7 +157,7 @@
 
         <!-- Ayurveda -->
         <li class="mobile-dropdown-item">
-          <button class="mobile-dropdown-toggle">
+          <button class="mobile-dropdown-toggle" onclick="window.location.href='/ayurveda'">
             Ayurveda <i class="fas fa-caret-down"></i>
           </button>
           <ul class="mobile-dropdown">
@@ -865,66 +865,45 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-  <!-- <script>
-    // toggle mobile menu
-    const toggleBtn = document.getElementById("mobileToggle");
-    const menu = document.getElementById("mobileMenu");
-
-    toggleBtn.addEventListener("click", () => {
-      menu.classList.toggle("show");
-      toggleBtn.classList.toggle("active");
-    });
-
-    // mobile dropdowns
-    document.querySelectorAll(".header-nav-links > ul > li > a").forEach(link => {
-      link.addEventListener("click", (e) => {
-        if (window.innerWidth <= 768) {
-          const parentLi = link.parentElement;
-          if (parentLi.querySelector(".dropdown")) {
-            e.preventDefault();
-            parentLi.classList.toggle("open");
-          }
-        }
-      });
-    });
-  </script>
-
-  <script>
-    const mobileToggleBtn = document.getElementById("mobileToggle");
-    const mobileSlideMenu = document.getElementById("mobileMenu");
-
-    mobileToggleBtn.addEventListener("click", () => {
-      mobileSlideMenu.classList.toggle("active");
-    });
-  </script> -->
-
   <script>
     (function () {
+
       const mobileToggleBtn = document.getElementById('mobileToggle');
       const mobileSlideMenuEl = document.getElementById('mobileMenu');
 
       if (!mobileToggleBtn || !mobileSlideMenuEl) return;
 
-      // open/close panel
+      /* -----------------------------------
+         OPEN/CLOSE MAIN MOBILE SLIDE MENU
+      ----------------------------------- */
       mobileToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         mobileSlideMenuEl.classList.toggle('mobile--open');
         mobileToggleBtn.classList.toggle('active');
       });
 
-      // close when clicking outside the menu
+      /* -----------------------------------
+          CLOSE MENU WHEN CLICKING OUTSIDE
+      ----------------------------------- */
       document.addEventListener('click', (e) => {
-        // if click is outside menu and outside toggle button -> close
         if (!mobileSlideMenuEl.contains(e.target) && !mobileToggleBtn.contains(e.target)) {
           mobileSlideMenuEl.classList.remove('mobile--open');
           mobileToggleBtn.classList.remove('active');
-          // also close any opened mobile dropdowns
-          document.querySelectorAll('#mobileMenu .mobile-nav-list > li.mobile--open')
+
+          // close inner dropdowns
+          document
+            .querySelectorAll('#mobileMenu .mobile-nav-list > li.mobile--open')
             .forEach(li => li.classList.remove('mobile--open'));
+
+          // close user menu
+          const userMenu = document.querySelector('.mobile-user-menu');
+          if (userMenu) userMenu.classList.remove('open');
         }
       });
 
-      // dropdown toggles inside mobile menu
+      /* -----------------------------------
+         DROPDOWN INSIDE MOBILE NAVIGATION
+      ----------------------------------- */
       document.querySelectorAll('#mobileMenu .mobile-nav-list > li').forEach(li => {
         const link = li.querySelector('a');
         const btn = li.querySelector('button.mobile-dropdown-toggle');
@@ -932,7 +911,6 @@
 
         if (!toggler) return;
 
-        // if there is a nested dropdown show toggle behaviour
         const nested = li.querySelector('.mobile-dropdown');
         if (nested) {
           toggler.addEventListener('click', (ev) => {
@@ -943,13 +921,29 @@
         }
       });
 
-      // prevent closing when clicking inside the menu
+      /* -----------------------------------
+         USER DROPDOWN (LOGIN / PROFILE)
+      ----------------------------------- */
+      const userToggle = document.querySelector('.mobile-user-toggle');
+      const userMenu = document.querySelector('.mobile-user-menu');
+
+      if (userToggle && userMenu) {
+        userToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          userMenu.classList.toggle('open');
+        });
+      }
+
+      /* -----------------------------------
+         PREVENT CLOSING WHEN CLICKING INSIDE
+      ----------------------------------- */
       mobileSlideMenuEl.addEventListener('click', (e) => {
         e.stopPropagation();
       });
 
     })();
   </script>
+
 
 
 </body>

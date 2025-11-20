@@ -4645,6 +4645,19 @@ body {
   margin-bottom: 80px;
 }
 
+.mobile-user-menu {
+  display: none;
+}
+
+.mobile-user-menu.open {
+  display: block;
+}
+
+.mobile-user {
+  position: relative;
+  z-index: 99999;
+}
+
 /* Cards grid */
 .careplan-section2-cards {
   display: flex;
@@ -8555,7 +8568,35 @@ html {
 
   .lab-test-hero {
     grid-template-columns: 1fr;
-    gap: 26px
+    gap: 26px;
+    height: 45vh;
+  }
+
+  .lab-test-hero h1 {
+    font-size: 28px;
+  }
+
+  .lab-test-hero p.lab-test-lead {
+    display: none;
+  }
+
+  .lab-test-container {
+    width: 100%;
+    padding: 0px 0px;
+  }
+
+  .lab-test-portfolio {
+    padding: 43px 18px;
+  }
+
+  .lab-test-about-list {
+    margin-top: 18px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .lab-test-section {
+    padding: 0px 20px;
   }
 
   .lab-test-hero-visual {
@@ -8568,6 +8609,16 @@ html {
 
   .lab-test-about {
     grid-template-columns: 1fr;
+    padding: 0px 20px;
+    margin-top: 43px;
+  }
+
+  .lab-test-btn {
+    margin-bottom: 20px;
+  }
+
+  .lab-test-about-image {
+    height: 41vh;
   }
 
   .lab-test-portfolio-grid {
@@ -8606,6 +8657,12 @@ html {
 
   .testimonial-comment {
     transform: translateY(20px);
+    display: none;
+  }
+
+  .cancercare-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(217px, 1fr));
   }
 
   .testimonial-comment.visible {
@@ -8615,6 +8672,11 @@ html {
   .ayuveda-section1 {
     flex-direction: column;
     text-align: center;
+    height: 43vh;
+  }
+
+  .ayuveda-text p {
+    display: none;
   }
 
   .ayuveda-image {
@@ -8642,7 +8704,7 @@ html {
   }
 
   .ayuveda-products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
   }
 
   .careplan-section2-cards {
@@ -8651,15 +8713,26 @@ html {
   }
 
   .careplan-section2-card {
-    width: 90%;
+    width: 100%;
   }
 
   .ayuveda-experience {
     flex-direction: column;
+    padding: 60px 4%;
+  }
+
+  .ayuveda-years {
+    width: 16vh;
+    height: 16vh;
   }
 
   .ayuveda-points {
     grid-template-columns: 1fr;
+  }
+
+  .ayuveda-counter-text p {
+    text-align: center;
+    padding-bottom: 23px;
   }
 
   .login-section {
@@ -8675,11 +8748,13 @@ html {
     justify-content: center;
     padding-right: 20px;
     text-align: center;
+    height: 50vh;
   }
 
   .careplan-section4-content {
-    max-width: 90%;
+    width: 86%;
     text-align: center;
+    margin-right: 0px;
   }
 
   .careplan-section3-table {
@@ -9031,6 +9106,10 @@ html {
     padding: 0 20px;
   }
 
+  .right {
+    width: 335px;
+  }
+
   .musthave-products-grid {
     display: flex;
     flex-wrap: wrap;
@@ -9105,7 +9184,7 @@ html {
 
   iframe {
     height: 202px;
-    width: 400px;
+    width: 100%;
   }
 
   .search-container button {
@@ -9206,4 +9285,122 @@ html {
     height: 36vh;
   }
 
+  .wishlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    display: block;
+    height: 300px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+
+  .consultdoc-banner {
+    height: 43vh;
+  }
+
+  .consultdoc-banner-content p {
+    display: none;
+  }
+
+  .consultdoc-hero {
+    height: 34vh;
+    margin-bottom: 17px;
+  }
+
+  .consultdoc-hero-media video {
+    height: 31vh;
+  }
+
+  .consultdoc-doc-photo img {
+    width: 100%;
+    height: 49vh;
+  }
+
+  .consultdoc-stat {
+    height: 12vh;
+  }
+
+  .consultdoc-stats {
+    margin-bottom: 35px;
+  }
+
+  .partner-hero {
+    height: 48vh;
+    padding: 40px 18px;
+  }
+
+  .hero-content p {
+    display: none;
+  }
+
+  .partnership-about-section {
+    padding: 43px 20px;
+  }
+
+  .partnership-about-image {
+    height: 39vh;
+  }
+
+  .partnership-benefits-content {
+    margin-top: 147px;
+  }
+
+  .partnership-benefits {
+    height: 104vh;
+  }
+
+  .partnership-success-section {
+    padding: 29px 21px;
+    margin-top: -60px;
+  }
+
+  .careplan-section5-grid {
+    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  }
+
+  .careplan-section {
+    height: 52vh;
+  }
+
+  .careplan-section5-button {
+    display: inline-block;
+    padding: 10px 21px;
+  }
+
+  .careplan-para {
+    display: none;
+  }
+
+  .cancercare-banner {
+    height: 56vh;
+  }
+
+  .cancercare-banner-content p {
+    display: none;
+  }
+
+  .cancercare-about {
+    padding: 35px 20px;
+  }
+
+  .cancercare-about-text p {
+    text-align: justify;
+  }
+
+  .cancercare-about-image img {
+    height: 42vh;
+  }
+
+  .cancercare-option {
+    width: 206px;
+  }
+
+  .cancercare-services {
+    padding: 27px 20px;
+  }
+
+  .cancercare-detail p {
+    font-size: 18px;
+  }
 }

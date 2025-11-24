@@ -17,6 +17,30 @@
 
 </head>
 
+<div id="welcome-bot-overlay">
+  <div class="welcome-bot-container">
+    <img id="welcomeBotAvatar" src="/static/img/doctor_avatar.png" class="welcome-bot-avatar">
+    <h2>Hey, I’m <span style="color:#5ec3eb;">Dr. MediBot</span></h2>
+    <p>I’m here to assist you. Tell me if you need anything!</p>
+  </div>
+</div>
+
+<div class="chatbox-container">
+  <div class="chat-toggle">
+    <img src="/static/img/doctor_avatar.png" class="chat-avatar">
+  </div>
+
+  <div class="chat-window">
+    <div class="chat-header">👨‍⚕️ Dr. MediBot</div>
+
+    <div class="chat-messages">
+      <p></p>
+    </div>
+
+    <input class="chat-input" placeholder="Ask me anything baby…">
+  </div>
+</div>
+
 <body>
   <!-- Header -->
   <header>
@@ -143,7 +167,7 @@
 
         <!-- Consult Doctors -->
         <li class="mobile-dropdown-item">
-          <button class="mobile-dropdown-toggle"  onclick="window.location.href='/consultdoc'">
+          <button class="mobile-dropdown-toggle" onclick="window.location.href='/consultdoc'">
             Consult Doctors <i class="fas fa-caret-down"></i>
           </button>
           <ul class="mobile-dropdown">
@@ -391,8 +415,6 @@
     });
   </script>
 
-
-
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init();
@@ -435,7 +457,6 @@
       }
     });
   </script>
-
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
@@ -942,6 +963,132 @@
       });
 
     })();
+  </script>
+
+  <!-- Place this at the END of your body -->
+  <script>
+    // Wait until DOM is ready
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // Toggle chat window
+      const chatToggle = document.querySelector(".chat-toggle");
+      const chatWindow = document.querySelector(".chat-window");
+      const chatInput = document.querySelector(".chat-input");
+      const chatMessages = document.querySelector(".chat-messages");
+
+      chatToggle.addEventListener("click", () => {
+        chatWindow.classList.toggle("open");
+      });
+
+      // Send message on Enter
+      chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          let message = chatInput.value.trim();
+          if (!message) return;
+          chatInput.value = "";
+
+          chatMessages.innerHTML += `
+          <div class="msg user-msg">
+            <b>You:</b> ${message}
+          </div>
+        `;
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          fetch("/chatbot/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message })
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.type === "product_card") {
+                chatMessages.innerHTML += `
+              <div class="msg bot-msg">
+                <b>Bot:</b><br>
+                ${data.html}
+              </div>
+            `;
+              } else {
+                chatMessages.innerHTML += `
+              <div class="msg bot-msg">
+                <b>Bot:</b> ${data.reply}
+              </div>
+            `;
+              }
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+      });
+
+      // Welcome Bot overlay animation
+      const overlay = document.getElementById("welcome-bot-overlay");
+      const bigBot = document.getElementById("welcomeBotAvatar");
+      const smallBot = chatToggle;
+
+      setTimeout(() => {
+        overlay.style.opacity = "0";
+
+        setTimeout(() => {
+          overlay.style.display = "none";
+          document.body.appendChild(bigBot);
+
+          const toggleRect = smallBot.getBoundingClientRect();
+          bigBot.style.position = "fixed";
+          bigBot.style.left = "50%";
+          bigBot.style.top = "50%";
+          bigBot.style.transform = "translate(-50%, -50%) scale(1)";
+          bigBot.offsetHeight;
+
+          bigBot.classList.add("float-to-target");
+          bigBot.style.transition = "left 2.5s ease, top 2.5s ease";
+          bigBot.style.left = `${toggleRect.left + toggleRect.width / 2}px`;
+          bigBot.style.top = `${toggleRect.top - 40}px`;
+
+          setTimeout(() => {
+            bigBot.style.display = "none";
+            smallBot.style.display = "block";
+            smallBot.classList.add("shine");
+          }, 2500);
+
+        }, 1000);
+      }, 2000);
+
+    });
+  </script>
+
+  <script>
+    const chatToggle = document.querySelector(".chat-toggle");
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    chatToggle.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      offsetX = e.clientX - chatToggle.getBoundingClientRect().left;
+      offsetY = e.clientY - chatToggle.getBoundingClientRect().top;
+      chatToggle.style.transition = "none"; // remove hover scale while dragging
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      let x = e.clientX - offsetX;
+      let y = e.clientY - offsetY;
+
+      // Keep within window bounds
+      const maxX = window.innerWidth - chatToggle.offsetWidth;
+      const maxY = window.innerHeight - chatToggle.offsetHeight;
+      x = Math.max(0, Math.min(x, maxX));
+      y = Math.max(0, Math.min(y, maxY));
+
+      chatToggle.style.left = x + "px";
+      chatToggle.style.top = y + "px";
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (!isDragging) return;
+      isDragging = false;
+      chatToggle.style.transition = "transform 0.3s"; // restore hover scale
+    });
   </script>
 
 

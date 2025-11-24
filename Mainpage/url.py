@@ -4,6 +4,7 @@ from .views import add_to_cart
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import signup_view, login_view, logout_view
+from Mainpage.views import chatbot_view
 urlpatterns = [
 path('products/', views.product_list, name='product_list'),
 
@@ -78,5 +79,7 @@ path('articles/filter/<slug:slug>/', views.filter_articles, name='filter_article
 
 path('auth/start/', views.auth_start, name='auth_start'),
 path('auth/callback/', views.auth_callback, name='auth_callback'),
+
+path('chatbot/', chatbot_view, name='chatbot'),
 
 ]

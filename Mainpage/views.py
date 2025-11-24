@@ -14,6 +14,134 @@ import json
 from django.db.models import Q
 import razorpay
 
+from openai import OpenAI
+from django.views.decorators.csrf import csrf_exempt
+
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
+
+@csrf_exempt
+def chatbot_view(request):
+    print("CHATBOT VIEW REACHED")
+
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        user_message = data.get("message", "")
+        print("MESSAGE:", user_message)
+
+        # Fetch all products normally (not values)
+        all_products = Product.objects.all()
+
+        # Convert to readable text for AI
+        product_data = "\n".join([
+            f"Name: {p.name}\n"
+            f"Type: {p.medicine_type}\n"
+            f"MRP: ₹{p.mrp}\n"
+            f"Selling Price: ₹{p.selling_price}\n"
+            f"Discount: {p.discount_percent}%\n"
+            f"Description: {p.description}\n"
+            f"Stock: {p.stock}\n"
+            f"Available: {p.is_available}\n"
+            "-----\n"
+            for p in all_products
+        ])
+
+        system_prompt = (
+            "You are MediTrust Pharmacy AI Assistant.\n"
+            "You have access ONLY to the product list given below.\n\n"
+
+            "Your behavior rules:\n"
+            "-------------------------------------------------------\n"
+            "1) If the user asks for BENEFITS, USAGE, SIDE EFFECTS,\n"
+            "   DOSAGE, DETAILS, or INFORMATION about a product:\n"
+            "   → Give a normal text answer.\n"
+            "   → DO NOT return PRODUCT_FOUND format.\n"
+            "   → DO NOT return product card format.\n\n"
+
+            "2) If the user asks to SEE, VIEW, BUY, SHOW, CHECK PRICE,\n"
+            "   FIND, or OPEN the product:\n"
+            "   → Then return this EXACT format:\n\n"
+            "   PRODUCT_FOUND:\n"
+            "   name=...\n"
+            "   id=...\n\n"
+            "   (Only include name and id. The backend will create the card.)\n"
+            "-------------------------------------------------------\n\n"
+
+            "3) NEVER mix product card format into normal explanations.\n"
+            "4) ALWAYS answer friendly and helpful.\n"
+            "5) If unsure which product they mean, show the 2 closest matches.\n"
+        )
+
+
+        def generate_product_card(p):
+            return f"""
+            <div class='musthave-product-card chatbot-product-card'>
+                <span class='musthave-discount-badge'>{p.discount_percent}% OFF</span>
+
+                <img src='{p.image.url}' alt='{p.name}'>
+
+                <div class='musthave-product-info'>
+                    <h4>{p.name}</h4>
+
+                    <div>
+                        <span class='musthave-price'>₹{p.selling_price}</span>
+                        <span class='musthave-old-price'>₹{p.mrp}</span>
+                    </div>
+
+                    <div class='musthave-stars'>★★★★☆</div>
+
+                    <a href='/product/{p.id}/' class='top-saver-btn'>View Product</a>
+                </div>
+            </div>
+            """
+
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "system", "content": "Product List:\n" + product_data},
+                    {"role": "user", "content": user_message}
+                ]
+            )
+
+            bot_reply = response.choices[0].message.content
+            print("BOT RAW:", bot_reply)
+
+            # Detect if AI returned product data
+            if "PRODUCT_FOUND:" in bot_reply:
+                print("Detected product card response")
+
+                # Extract product name
+                lines = bot_reply.split("\n")
+                name_line = [x for x in lines if x.startswith("name=")][0]
+                product_name = name_line.replace("name=", "").strip()
+
+                product = Product.objects.filter(name__icontains=product_name).first()
+
+                if product:
+                    html = generate_product_card(product)
+
+                    return JsonResponse({
+                        "type": "product_card",
+                        "html": html
+                    })
+
+            # OTHERWISE normal text reply
+            return JsonResponse({
+                "type": "text",
+                "reply": bot_reply
+            })
+
+        except Exception as e:
+            print("ERROR:", str(e))
+            return JsonResponse({
+                "type": "text",
+                "reply": "Oops baby, I had a small issue 😔",
+                "error": str(e)
+            }, status=500)
+
+    return JsonResponse({"reply": "Only POST requests allowed."})
+
 def pharmacy_services(request):
     return {'pharmacy_services': PharmacyService.objects.filter(is_available=True)}
 

@@ -13,38 +13,29 @@ from django.http import JsonResponse
 import json
 from django.db.models import Q
 import razorpay
-import os
-import json
-import re
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from openai import OpenAI
+import json
+import os
+import re
 from .models import Product
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @csrf_exempt
 def chatbot_view(request):
-    print("🔥 CHATBOT VIEW REACHED")
-
     if request.method != "POST":
         return JsonResponse({"reply": "Only POST requests allowed."})
 
     try:
         data = json.loads(request.body.decode("utf-8"))
-    except:
-        return JsonResponse({"reply": "Invalid JSON"}, status=400)
+        user_message = data.get("message", "")
 
-    user_message = data.get("message", "")
-    print("📝 USER MESSAGE:", user_message)
+        # FETCH PRODUCTS
+        all_products = Product.objects.all()
 
-    # Fetch products
-    all_products = Product.objects.all()
-
-    # Convert product info into text block
-    product_list_text = ""
-    for p in all_products:
-        product_list_text += (
+        product_data = "\n".join([
             f"Name: {p.name}\n"
             f"Type: {p.medicine_type}\n"
             f"MRP: ₹{p.mrp}\n"
@@ -54,94 +45,69 @@ def chatbot_view(request):
             f"Stock: {p.stock}\n"
             f"Available: {p.is_available}\n"
             "-----\n"
+            for p in all_products
+        ])
+
+        system_prompt = (
+            "You are MediTrust Pharmacy AI Assistant.\n"
+            "You have access ONLY to the product list given below.\n\n"
+            "Rules:\n"
+            "1) If user asks benefits/usage/side effects/dosage/details → give normal text.\n"
+            "2) If user asks to view/buy/show/find/check price → return EXACTLY:\n"
+            "   PRODUCT_FOUND:\n"
+            "   name=...\n"
+            "   id=...\n"
+            "3) Never mix formats.\n"
         )
 
-    # System message for AI
-    system_prompt = (
-        "You are MediTrust Pharmacy AI Assistant.\n"
-        "You have access ONLY to the product list below.\n\n"
-        "RULES:\n"
-        "1) If the user asks for BENEFITS, USAGE, SIDE EFFECTS, DOSAGE, DETAILS → give normal text.\n"
-        "2) If they ask to SEE, BUY, OPEN, PRICE → return STRICT format:\n\n"
-        "PRODUCT_FOUND:\n"
-        "name=...\n"
-        "id=...\n\n"
-        "3) No mixing of formats.\n"
-        "4) Be friendly.\n"
-        "5) If unsure, show 2 possible products.\n"
-    )
-
-    # Helper to generate product card
-    def generate_product_card(p):
-        image_url = p.image.url if p.image else "/static/default.jpg"
-        return f"""
-        <div class='musthave-product-card chatbot-product-card'>
-            <span class='musthave-discount-badge'>{p.discount_percent}% OFF</span>
-            <img src='{image_url}' alt='{p.name}'>
-            <div class='musthave-product-info'>
-                <h4>{p.name}</h4>
-                <div>
-                    <span class='musthave-price'>₹{p.selling_price}</span>
-                    <span class='musthave-old-price'>₹{p.mrp}</span>
-                </div>
-                <div class='musthave-stars'>★★★★☆</div>
-                <a href='/product/{p.id}/' class='top-saver-btn'>View Product</a>
-            </div>
-        </div>
-        """
-
-    try:
+        # 🔥 NEW OPENAI API CALL
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "system", "content": "Product List:\n" + product_list_text},
+                {"role": "system", "content": "Product List:\n" + product_data},
                 {"role": "user", "content": user_message},
-            ],
+            ]
         )
 
         bot_reply = response.choices[0].message.content
-        print("🤖 AI RAW RESPONSE:", bot_reply)
 
-        # If AI returned a product result format
+        # PRODUCT CARD RESPONSE
         if "PRODUCT_FOUND:" in bot_reply:
             lines = bot_reply.split("\n")
             name_line = next((x for x in lines if x.startswith("name=")), None)
-            id_line = next((x for x in lines if x.startswith("id=")), None)
 
             if name_line:
                 product_name = name_line.replace("name=", "").strip()
                 product = Product.objects.filter(name__icontains=product_name).first()
 
                 if product:
-                    card_html = generate_product_card(product)
-                    return JsonResponse({
-                        "type": "product_card",
-                        "html": card_html
-                    })
+                    html = f"""
+                    <div class='musthave-product-card chatbot-product-card'>
+                        <span class='musthave-discount-badge'>{product.discount_percent}% OFF</span>
+                        <img src='{product.image.url}' alt='{product.name}'>
+                        <div class='musthave-product-info'>
+                            <h4>{product.name}</h4>
+                            <div>
+                                <span class='musthave-price'>₹{product.selling_price}</span>
+                                <span class='musthave-old-price'>₹{product.mrp}</span>
+                            </div>
+                            <div class='musthave-stars'>★★★★☆</div>
+                            <a href='/product/{product.id}/' class='top-saver-btn'>View Product</a>
+                        </div>
+                    </div>
+                    """
+                    return JsonResponse({"type": "product_card", "html": html})
 
-        # Normal text reply otherwise
-        return JsonResponse({
-            "type": "text",
-            "reply": bot_reply
-        })
+        # NORMAL TEXT RESPONSE
+        return JsonResponse({"type": "text", "reply": bot_reply})
 
     except Exception as e:
-        message = str(e)
-        print("❌ ERROR:", message)
-
-        # Detect rate limit
-        if "Rate limit" in message:
-            return JsonResponse({
-                "type": "text",
-                "reply": "⚠️ Token limit reached! Please wait a bit, baby.",
-                "error": message
-            }, status=429)
-
+        print("SERVER ERROR:", e)
         return JsonResponse({
             "type": "text",
-            "reply": "Oops, something went wrong 😔",
-            "error": message
+            "reply": "Oops... something went wrong 😔",
+            "error": str(e)
         }, status=500)
 
     return JsonResponse({"reply": "Only POST requests allowed."})

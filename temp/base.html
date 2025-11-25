@@ -996,9 +996,13 @@
 
           fetch("/chatbot/", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken")
+            },
             body: JSON.stringify({ message })
           })
+
             .then(res => res.json())
             .then(data => {
               if (data.type === "product_card") {
@@ -1090,8 +1094,6 @@
       chatToggle.style.transition = "transform 0.3s"; // restore hover scale
     });
   </script>
-
-
 
 </body>
 

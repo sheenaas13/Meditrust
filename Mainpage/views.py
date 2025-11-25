@@ -145,6 +145,7 @@ def chatbot_view(request):
                 "reply": "Oops, I had a small issue 😔",
                 "error": message
             }, status=500)
+        
         return JsonResponse({"reply": "Only POST requests allowed."})
 
 def pharmacy_services(request):

@@ -240,16 +240,16 @@ header.shrink .logo img {
   color: white;
 }
 
-.type-med {
+/* .type-med {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 40px 20px;
   gap: 20px;
   background-color: #f5f5f5;
-}
+} */
 
-.med-card {
+/* .med-card {
   position: relative;
   width: 250px;
   height: 300px;
@@ -258,7 +258,7 @@ header.shrink .logo img {
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-}
+} */
 
 .med-card .overlay {
   position: absolute;
@@ -278,13 +278,13 @@ header.shrink .logo img {
   opacity: 1;
 }
 
-.med-card h3 {
+/* .med-card h3 {
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-}
+} */
 
-.med-card button {
+/* .med-card button {
   margin-top: 15px;
   padding: 8px 14px;
   border: 1px solid #fff;
@@ -293,12 +293,12 @@ header.shrink .logo img {
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
-}
+} */
 
-.med-card button:hover {
+/* .med-card button:hover {
   background: #fff;
   color: #000;
-}
+} */
 
 /* Features Section */
 /* --- 2nd Section: Features --- */
@@ -8651,7 +8651,6 @@ html {
 
 @media (max-width: 768px) {
 
-  html,
   body {
     overflow-x: hidden;
   }
@@ -8660,10 +8659,55 @@ html {
     box-sizing: border-box;
   }
 
+  .mobile-user {
+    position: relative;
+    display: inline-block;
+  }
+
+  .mobile-user-menu {
+    display: none;
+    position: absolute;
+    background: #fff;
+    width: 150px;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+  }
+
+  .mobile-user:hover .mobile-user-menu {
+    display: block;
+  }
+
+  .mobile-slide-menu .mobile-user-menu {
+    margin-top: 0px;
+  }
+
+  .mobile-slide-menu .mobile-user-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+  }
+
   .container,
   section,
   div {
     max-width: 100%;
+  }
+
+  .chat-window {
+    width: 363px;
+  }
+
+  .register-container {
+    flex-direction: column;
   }
 
   .mobile-slide-menu .mobile-nav-list>li:hover>.mobile-dropdown {

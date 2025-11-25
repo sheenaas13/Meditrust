@@ -8651,6 +8651,10 @@ html {
 
 @media (max-width: 768px) {
 
+  body{
+    overflow-x: hidden;
+  }
+
   .mobile-slide-menu .mobile-nav-list>li:hover>.mobile-dropdown {
     display: block;
   }

@@ -8651,8 +8651,19 @@ html {
 
 @media (max-width: 768px) {
 
-  body{
+  html,
+  body {
     overflow-x: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .container,
+  section,
+  div {
+    max-width: 100%;
   }
 
   .mobile-slide-menu .mobile-nav-list>li:hover>.mobile-dropdown {

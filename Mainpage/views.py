@@ -60,7 +60,7 @@ def chatbot_view(request):
             "3) Never mix formats.\n"
         )
 
-        # 🔥 NEW OPENAI API CALL
+        # 🔥 OPENAI CALL
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -72,7 +72,7 @@ def chatbot_view(request):
 
         bot_reply = response.choices[0].message.content
 
-        # PRODUCT CARD RESPONSE
+        # PRODUCT CARD HANDLING
         if "PRODUCT_FOUND:" in bot_reply:
             lines = bot_reply.split("\n")
             name_line = next((x for x in lines if x.startswith("name=")), None)
@@ -85,7 +85,7 @@ def chatbot_view(request):
                     html = f"""
                     <div class='musthave-product-card chatbot-product-card'>
                         <span class='musthave-discount-badge'>{product.discount_percent}% OFF</span>
-                        <img src='{product.image.url}' alt='{product.name}'>
+                        <img src='{product.image.url}' alt='{product.name}' />
                         <div class='musthave-product-info'>
                             <h4>{product.name}</h4>
                             <div>
@@ -99,15 +99,29 @@ def chatbot_view(request):
                     """
                     return JsonResponse({"type": "product_card", "html": html})
 
-        # NORMAL TEXT RESPONSE
         return JsonResponse({"type": "text", "reply": bot_reply})
 
     except Exception as e:
-        print("SERVER ERROR:", e)
+        error_message = str(e)
+
+        # ⭐ Detect OpenAI rate limit or token usage limit  
+        if "Rate limit" in error_message or "limit" in error_message:
+            
+            # Extract wait time like: "Please try again in 4h 48m 34s"
+            match = re.search(r"try again in ([\dhms\s:]+)", error_message)
+            wait_time = match.group(1) if match else "a while"
+
+            return JsonResponse({
+                "type": "text",
+                "reply": f"⚠️ Baby, the AI limit is reached. You can try again in {wait_time}.",
+                "error": error_message
+            }, status=429)
+
+        # 🛑 Other errors
         return JsonResponse({
             "type": "text",
-            "reply": "Oops... something went wrong 😔",
-            "error": str(e)
+            "reply": error_message,  # shows EXACT error
+            "error": error_message
         }, status=500)
 
     return JsonResponse({"reply": "Only POST requests allowed."})

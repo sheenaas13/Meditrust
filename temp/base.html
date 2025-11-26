@@ -68,7 +68,7 @@
           <a href="{% url 'labtest' %}">Lab Test <i class="fas fa-caret-down arrow"></i></a>
           <ul class="dropdown Lab-dropdown">
             {% for service in pharmacy_services %}
-            <li><a href="">{{ service.name }}</a></li>
+            <li><a href="{% url 'labtest' %}#labtest-section">{{ service.name }}</a></li>
             {% endfor %}
           </ul>
         </li>

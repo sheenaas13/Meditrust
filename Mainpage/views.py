@@ -184,14 +184,29 @@ def service_booking(request, service_id):
     services = PharmacyService.objects.all()
     service = get_object_or_404(PharmacyService, id=service_id)
 
+    # If service is unavailable
     if not service.is_available:
         return render(request, 'service_unavailable.html', {'service': service})
 
+    # Already booked slots
     booked_slots_qs = ServiceBooking.objects.filter(service=service).values_list('appointment_time', flat=True)
     booked_slots = [slot.strftime('%Y-%m-%dT%H:%M') for slot in booked_slots_qs]
 
     doctors = Doctor.objects.filter(is_available=True)
 
+    # ⭐ CREATE RAZORPAY ORDER (Needed for checkout.js)
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+    order_amount = int(service.price * 100)   # Razorpay amount in paise
+    order_currency = "INR"
+
+    razorpay_order = client.order.create({
+        "amount": order_amount,
+        "currency": order_currency,
+        "payment_capture": 1
+    })
+
+    # ⭐ POST Request — save booking after payment success
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -219,6 +234,7 @@ def service_booking(request, service_id):
             payment_status='paid'
         )
 
+        # Email confirmation
         send_mail(
             subject=f'Booking Confirmation for {service.name}',
             message=f"""
@@ -242,6 +258,7 @@ Thank you for choosing our pharmacy!
             fail_silently=False,
         )
 
+        # Payment email
         send_mail(
             subject=f'Payment Received for {service.name}',
             message=f"""
@@ -260,13 +277,18 @@ Thank you!
 
         return redirect('booking_success', booking_id=booking.id)
 
+    # ⭐ Pass Razorpay + service data to template
     context = {
         'service': service,
         'doctors': doctors,
         'booked_slots': booked_slots,
         'categories': categories,
         'services': services,
+        'razorpay_key': settings.RAZORPAY_KEY_ID,
+        'razorpay_order_id': razorpay_order['id'],
+        'total': service.price,
     }
+
     return render(request, 'servicebooking.html', context)
 
 def booking_success(request, booking_id):
@@ -609,19 +631,21 @@ def checkout(request):
 
 @login_required(login_url='login')
 def payment_success(request):
-    """Called after successful payment — create order, clear cart & show success message"""
     user = request.user
     cart_items = Cart.objects.filter(user=user)
 
+    # If cart is empty, still show success page
     if not cart_items.exists():
-        return redirect('cart_page')
+        return render(request, 'payment_success.html')
 
     total_amount = sum(item.total_price for item in cart_items)
+
     order = Order.objects.create(
         user=user,
         total_amount=total_amount,
         status='Paid'
     )
+
     for item in cart_items:
         OrderItem.objects.create(
             order=order,
@@ -631,7 +655,9 @@ def payment_success(request):
         )
 
     cart_items.delete()
+
     return render(request, 'payment_success.html', {'order': order})
+
 
 @login_required(login_url='login')
 def ordered_items_view(request):

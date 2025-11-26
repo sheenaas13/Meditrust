@@ -57,43 +57,44 @@
 </section>
 
 <section class="type-med">
-    {% for cat in categories %}
-    {% if cat.name == "Vitamins & Supplements" %}
-    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
-        data-aos-duration="1200" style="background-image: url('/static/img/vitamins1.webp');">
-        <div class="overlay">
-            <h3>{{ cat.name }}</h3>
-            <button>→</button>
-        </div>
-    </a>
-    {% elif cat.name == "Pain Relief" %}
-    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
-        data-aos-duration="1000" style="background-image: url('/static/img/painreliefs1.jpg');">
-        <div class="overlay">
-            <h3>{{ cat.name }}</h3>
-            <button>→</button>
-        </div>
-    </a>
-    {% elif cat.name == "Skin Care" %}
-    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
-        data-aos-duration="800" style="background-image: url('/static/img/skincare1.jpg');">
-        <div class="overlay">
-            <h3>{{ cat.name }}</h3>
-            <button>→</button>
-        </div>
-    </a>
-    {% elif cat.name == "Fitness & Sports Nutrition" %}
-    <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
-        data-aos-duration="400" style="background-image: url('/static/img/supplements1.jpg');">
-        <div class="overlay">
-            <h3>{{ cat.name }}</h3>
-            <button>→</button>
-        </div>
-    </a>
-    {% endif %}
-    {% endfor %}
+    <div class="aos-wrapper">
+        {% for cat in categories %}
+        {% if cat.name == "Vitamins & Supplements" %}
+        <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+            data-aos-duration="1200" style="background-image: url('/static/img/vitamins1.webp');">
+            <div class="overlay">
+                <h3>{{ cat.name }}</h3>
+                <button>→</button>
+            </div>
+        </a>
+        {% elif cat.name == "Pain Relief" %}
+        <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+            data-aos-duration="1000" style="background-image: url('/static/img/painreliefs1.jpg');">
+            <div class="overlay">
+                <h3>{{ cat.name }}</h3>
+                <button>→</button>
+            </div>
+        </a>
+        {% elif cat.name == "Skin Care" %}
+        <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+            data-aos-duration="800" style="background-image: url('/static/img/skincare1.jpg');">
+            <div class="overlay">
+                <h3>{{ cat.name }}</h3>
+                <button>→</button>
+            </div>
+        </a>
+        {% elif cat.name == "Fitness & Sports Nutrition" %}
+        <a href="{% url 'product_list' %}?category={{ cat.id }}" class="med-card" data-aos="fade-left"
+            data-aos-duration="400" style="background-image: url('/static/img/supplements1.jpg');">
+            <div class="overlay">
+                <h3>{{ cat.name }}</h3>
+                <button>→</button>
+            </div>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
 </section>
-
 
 <!-- 3rd Section: Promos -->
 <!-- <section class="sec3-promos">
@@ -137,7 +138,6 @@
                     </a>
                 </div>
                 {% endfor %}
-
             </div>
 
             <!-- Pagination -->

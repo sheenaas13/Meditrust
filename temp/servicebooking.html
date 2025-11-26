@@ -48,7 +48,7 @@
             <input type="hidden" name="appointment_time" id="appointment_time">
             <p class="booking-price">Price: ₹{{ service.price }}</p>
 
-            <a href="" class="booking-btn">Book & Pay</a>
+            <a href="#" class="booking-btn" id="rzp-button1">Book & Pay</a>
 
         </form>
 
@@ -56,12 +56,16 @@
     </div>
 </section>
 
-<!-- Razorpay Checkout -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("booking-form");
         const payButton = document.getElementById("rzp-button1");
+        const form = document.getElementById("booking-form");
+
+        if (!payButton || !form) {
+            console.error("Booking form or Razorpay button missing.");
+            return;
+        }
 
         const options = {
             "key": "{{ razorpay_key }}",
@@ -70,39 +74,32 @@
             "name": "MediTrust",
             "description": "Service Booking Payment",
             "order_id": "{{ razorpay_order_id }}",
+
             "handler": function (response) {
-                // Add Razorpay payment details to the form
-                const inputPaymentId = document.createElement("input");
-                inputPaymentId.type = "hidden";
-                inputPaymentId.name = "razorpay_payment_id";
-                inputPaymentId.value = response.razorpay_payment_id;
+                if (response.razorpay_payment_id) {
+                    form.insertAdjacentHTML("beforeend", `
+                    <input type="hidden" name="razorpay_payment_id" value="${response.razorpay_payment_id}">
+                    <input type="hidden" name="razorpay_order_id" value="${response.razorpay_order_id}">
+                `);
 
-                const inputOrderId = document.createElement("input");
-                inputOrderId.type = "hidden";
-                inputOrderId.name = "razorpay_order_id";
-                inputOrderId.value = response.razorpay_order_id;
-
-                form.appendChild(inputPaymentId);
-                form.appendChild(inputOrderId);
-
-                // Set form action to the success view
-                form.action = "{% url 'payment_success' %}";
-                form.method = "POST";
-                form.submit();
+                    form.action = "{% url 'payment_success' %}";
+                    form.method = "POST";
+                    form.submit();
+                } else {
+                    alert("Payment failed or cancelled.");
+                }
             },
-            "theme": {
-                "color": "#28a745"
-            }
+
+            "theme": { "color": "#28a745" }
         };
 
-        const rzp1 = new Razorpay(options);
+        const rzp = new Razorpay(options);
 
-        payButton.addEventListener("click", function (e) {
+        payButton.onclick = function (e) {
             e.preventDefault();
-            rzp1.open();
-        });
+            rzp.open();
+        };
     });
 </script>
-
 
 {% endblock %}

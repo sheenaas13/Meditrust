@@ -2439,9 +2439,10 @@ body {
 
 /* Submit Button */
 .booking-btn {
+  text-align: center;
   display: block;
   width: 100%;
-  padding: 14px 20px;
+  padding: 18px 20px;
   background: linear-gradient(135deg, #28a745, #218838);
   color: #fff;
   font-size: 18px;
@@ -2451,6 +2452,7 @@ body {
   cursor: pointer;
   transition: 0.3s ease;
   letter-spacing: 0.3px;
+  text-decoration: none;
 }
 
 .booking-btn:hover {
@@ -2527,6 +2529,91 @@ body {
   padding-top: 20px;
   margin-bottom: 40px;
 }
+
+/* Success Page Styling */
+.success-wrapper {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7fdf9;
+  padding: 40px 0;
+}
+
+.success-box {
+  background: #ffffff;
+  padding: 40px 50px;
+  width: 500px;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  animation: fadeSlide 0.6s ease;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 25px;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  font-size: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.success-box h2 {
+  font-size: 28px;
+  color: #1d1d1d;
+  margin-bottom: 10px;
+}
+
+.success-username {
+  font-size: 20px;
+  color: #444;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.success-text {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.success-btn {
+  padding: 12px 25px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.success-btn:hover {
+  background: #218838;
+  transform: translateY(-2px);
+}
+
+/* Animation */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .consultdoc-service-card {
   background: #fff;
@@ -8648,14 +8735,34 @@ html {
   border: 1px solid #eee;
 }
 
+.aos-wrapper {
+  display: flex;
+  gap: 16px;
+}
+
 
 @media (max-width: 768px) {
 
+  html,
   body {
     overflow-x: hidden;
   }
 
   * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .aos-wrapper {
+    overflow-x: visible !important;
+    width: 100%;
+    position: relative;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .type-med .med-card {
+    width: 100%;
     box-sizing: border-box;
   }
 
@@ -8664,7 +8771,62 @@ html {
     display: inline-block;
   }
 
-  .mobile-user-menu {
+  .mobile-slide-menu .mobile-user-menu li:hover {
+    color: #00a3ff;
+  }
+
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .profilepage-dashboard {
+    flex-direction: column;
+  }
+
+  .register-container {
+    height: 213vh;
+  }
+
+  .profilepage-sidebar {
+    height: 397px;
+    width: 428px;
+    background-color: #00aaff;
+    color: white;
+    gap: 55px;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+  }
+
+  .profilepage-logout {
+    margin-top: 36px;
+  }
+
+  .profilepage-main-content {
+    flex: 1;
+    padding: 39px 20px;
+  }
+
+  .profilepage-card p {
+    margin-bottom: 22px;
+    line-height: 1.7;
+  }
+
+  .profilepage-header h1 {
+    font-size: 30px;
+  }
+
+  .profilepage-card {
+    padding: 16px;
+  }
+
+  .register-right {
+    height: 100%;
+  }
+
+  /* .mobile-user-menu {
     display: none;
     position: absolute;
     background: #fff;
@@ -8673,7 +8835,7 @@ html {
     border-radius: 6px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-  }
+  } */
 
   .mobile-user:hover .mobile-user-menu {
     display: block;
@@ -9356,6 +9518,7 @@ html {
 
   .type-med {
     padding: 0px 20px;
+    height: 100vh;
   }
 
   .sec4-categories {
@@ -9389,7 +9552,7 @@ html {
     background: #fff;
     border-radius: 10px;
     height: 43vh;
-    width: 219px;
+    width: 184px;
   }
 
   .banner-home2-content {
@@ -9446,7 +9609,7 @@ html {
   .petcare-product-link {
     text-decoration: none;
     color: black;
-    width: 220px;
+    width: 188px;
   }
 
   .Inminutes-sectionname {
@@ -9502,7 +9665,7 @@ html {
 
   .search-container button {
     position: absolute;
-    right: 107px;
+    right: 80px;
   }
 
   .product-listing-header {
@@ -9521,7 +9684,7 @@ html {
     width: 100%;
     height: 70vh;
     align-items: flex-start;
-    gap: 30px;
+    gap: 10px;
   }
 
   .thumbnail-list {
@@ -9583,7 +9746,7 @@ html {
   }
 
   .cartpage-quantity {
-    width: 59px;
+    width: 72px;
   }
 
   .cartpage-quantity form {

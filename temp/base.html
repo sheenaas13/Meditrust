@@ -30,15 +30,24 @@
     <img src="/static/img/doctor_avatar.png" class="chat-avatar">
   </div>
 
-  <div class="chat-window">
+  <div class="chat-window" id="chatWindow">
     <div class="chat-header">👨‍⚕️ Dr. MediBot</div>
 
-    <div class="chat-messages">
-      <p></p>
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <!-- Typing Indicator -->
+    <div class="typing-indicator" id="typingIndicator">
+      <span></span><span></span><span></span>
     </div>
 
-    <input class="chat-input" placeholder="Ask me anything…">
+    <div class="chat-input-area">
+      <input class="chat-input" id="chatInput" placeholder="Ask me anything…">
+      <button class="send-btn" id="sendBtn">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
   </div>
+
 </div>
 
 <body>
@@ -221,7 +230,6 @@
           </ul>
         </div>
 
-
         <!-- Wishlist -->
         <a href="{% url 'wishlist' %}" class="mobile-wishlist">
           <i class="fas fa-heart"></i>
@@ -350,6 +358,38 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    function floatToBot() {
+      const overlay = document.querySelector('.float-to-target');
+      const bot = document.querySelector('.chat-toggle');
+      if (!overlay || !bot) return;
+
+      const oRect = overlay.getBoundingClientRect();
+      const oX = oRect.left + oRect.width / 2;
+      const oY = oRect.top + oRect.height / 2;
+
+      const bRect = bot.getBoundingClientRect();
+      const bX = bRect.left + bRect.width / 2;
+      const bY = bRect.top + bRect.height / 2;
+
+      // Baby’s custom offsets ❤️
+      const offsetX = 0;     // left/right adjust
+      const offsetY = 25;    // DOWNWARDS adjust
+
+      const diffX = bX - oX + offsetX;
+      const diffY = bY - oY + offsetY;
+
+      overlay.style.setProperty('--moveX', diffX + 'px');
+      overlay.style.setProperty('--moveY', diffY + 'px');
+
+      overlay.classList.add('animate-to-bot');
+    }
+
+
+    // Call when your overlay appears
+    setTimeout(floatToBot, 100);
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -965,78 +1005,143 @@
     })();
   </script>
 
-  <!-- Place this at the END of your body -->
   <script>
-    // Wait until DOM is ready
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", () => {
 
-      // Toggle chat window
       const chatToggle = document.querySelector(".chat-toggle");
       const chatWindow = document.querySelector(".chat-window");
-      const chatInput = document.querySelector(".chat-input");
       const chatMessages = document.querySelector(".chat-messages");
+      const input = document.querySelector(".chat-input");
+      const sendBtn = document.querySelector(".send-btn");
 
+      /* ------------------ CHAT WINDOW TOGGLE ------------------ */
       chatToggle.addEventListener("click", () => {
         chatWindow.classList.toggle("open");
+
+        // auto-scroll after animation
+        setTimeout(() => {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 200);
       });
 
-      // Send message on Enter
-      chatInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          let message = chatInput.value.trim();
-          if (!message) return;
-          chatInput.value = "";
+      /* ------------------ ADD MESSAGE (USER/BOT) ------------------ */
+      function addMessage(text, type, isHTML = false) {
+        const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-          chatMessages.innerHTML += `
-          <div class="msg user-msg">
-            <b>You:</b> ${message}
-          </div>
+        const msgDiv = document.createElement("div");
+        msgDiv.classList.add("msg", type);
+
+        msgDiv.innerHTML = isHTML
+          ? `<div>${text}</div><span class="timestamp">${time}</span>`
+          : `<div>${text}</div><span class="timestamp">${time}</span>`;
+
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      /* ------------------ BOT TYPING INDICATOR ------------------ */
+      function botTyping(show) {
+        let typingDiv = document.querySelector(".typing-indicator");
+
+        if (show) {
+          if (!typingDiv) {
+            typingDiv = document.createElement("div");
+            typingDiv.className = "typing-indicator bot-msg";
+            typingDiv.innerHTML = `
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
         `;
-          chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+        } else {
+          if (typingDiv) typingDiv.remove();
+        }
+      }
 
-          fetch("/chatbot/", {
+      /* ------------------ SEND MESSAGE ------------------ */
+      async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, "user-msg");
+        input.value = "";
+
+        botTyping(true);
+
+        try {
+          const res = await fetch("/chatbot/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               "X-CSRFToken": getCookie("csrftoken")
             },
-            body: JSON.stringify({ message })
-          })
+            body: JSON.stringify({ message: text })
+          });
 
-            .then(res => res.json())
-            .then(data => {
-              if (data.type === "product_card") {
-                chatMessages.innerHTML += `
-              <div class="msg bot-msg">
-                <b>Bot:</b><br>
-                ${data.html}
-              </div>
-            `;
-              } else {
-                chatMessages.innerHTML += `
-              <div class="msg bot-msg">
-                <b>Bot:</b> ${data.reply}
-              </div>
-            `;
-              }
-              chatMessages.scrollTop = chatMessages.scrollHeight;
-            });
+          const data = await res.json();
+
+          botTyping(false);
+
+          if (data.type === "product_card") {
+            addMessage(data.html, "bot-msg", true);
+          } else {
+            addMessage(data.reply, "bot-msg");
+          }
+
+        } catch (e) {
+          botTyping(false);
+          addMessage("Baby I’m having trouble answering right now 😢", "bot-msg");
+        }
+      }
+
+      /* ------------------ SEND ON CLICK ------------------ */
+      sendBtn.addEventListener("click", sendMessage);
+
+      /* ------------------ SEND ON ENTER ------------------ */
+      input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          sendMessage();
         }
       });
 
-      // Welcome Bot overlay animation
-      const overlay = document.getElementById("welcome-bot-overlay");
-      const bigBot = document.getElementById("welcomeBotAvatar");
-      const smallBot = chatToggle;
+      /* ------------------ CSRF HELPER ------------------ */
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + "=")) {
+              cookieValue = cookie.substring(name.length + 1);
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
+    }); // DOMContentLoaded END
+
+    /* ------------------ WELCOME BOT OVERLAY ANIMATION ------------------ */
+    const overlay = document.getElementById("welcome-bot-overlay");
+    const bigBot = document.getElementById("welcomeBotAvatar");
+    const smallBot = document.querySelector(".chat-toggle");
+
+    if (overlay && bigBot && smallBot) {
 
       setTimeout(() => {
         overlay.style.opacity = "0";
 
         setTimeout(() => {
           overlay.style.display = "none";
+
           document.body.appendChild(bigBot);
 
           const toggleRect = smallBot.getBoundingClientRect();
+
           bigBot.style.position = "fixed";
           bigBot.style.left = "50%";
           bigBot.style.top = "50%";
@@ -1056,8 +1161,7 @@
 
         }, 1000);
       }, 2000);
-
-    });
+    }
   </script>
 
   <script>

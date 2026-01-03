@@ -7012,7 +7012,7 @@ body {
   border-right: 1px solid #eee;
   position: sticky;
   top: 0px;
-  left: 55%;
+  left: 54%;
   transform: translateX(-650px);
   height: calc(100vh - 179px);
   overflow-y: scroll;
@@ -9930,4 +9930,9 @@ html {
     width: 103px;
     height: 103px;
   }
+}
+
+@media (min-width: 1440px){
+  .product-listing-sidebar {
+    left: 44%;}
 }

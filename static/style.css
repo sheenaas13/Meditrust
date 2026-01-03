@@ -9332,6 +9332,9 @@ html {
 
   .product-listing-grid {
     margin-left: 0;
+    position: absolute;
+    top: 609px;
+    background-color: transparent;
     height: auto;
     flex: none;
   }

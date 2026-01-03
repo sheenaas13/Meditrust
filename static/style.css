@@ -143,12 +143,16 @@ header.shrink .logo img {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
-.user-menu li {
+.user-dropdown .user-menu li {
   padding: 5px 10px;
+  background-color: white;
+  color: #00a3ff;
+  text-decoration: none !important;
 }
 
-.user-menu li:hover {
+.user-dropdown .user-menu li:hover {
   background: #63c1e5;
+  color: white !important;
 }
 
 .user-dropdown:hover .user-menu {
@@ -9935,7 +9939,12 @@ html {
   }
 }
 
-@media (min-width: 1440px){
+@media (min-width: 1440px) {
   .product-listing-sidebar {
-    left: 44%;}
+    left: 44%;
+  }
+
+  .register-container {
+    height: 1176px;
+  }
 }

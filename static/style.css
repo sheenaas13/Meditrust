@@ -308,8 +308,8 @@ header.shrink .logo img {
 }
 
 .sec2-features .container {
-  width: 90%;
-  max-width: 1200px;
+  width: 100%;
+  padding: 0px 59px;
   margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -951,10 +951,10 @@ iframe {
 
 
 .musthave-sectionname {
-  max-width: 1200px;
+  width: 100%;
+  padding: 0px 59px;
   height: 70vh;
   margin: 50px auto;
-  padding: 0 15px;
 }
 
 .musthave-header {
@@ -1120,9 +1120,9 @@ iframe {
 
 /* General section styling */
 .petcare-sectionname {
-  max-width: 1200px;
+  width: 100%;
+  padding: 0px 59px;
   margin: 50px auto;
-  padding: 0 15px;
 }
 
 .petcare-header {
@@ -1152,13 +1152,12 @@ iframe {
 .petcare-products-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 13px;
 }
 
 .petcare-product-link {
   text-decoration: none;
   color: black;
-  width: 218px;
 }
 
 /* Product card */
@@ -1266,8 +1265,8 @@ iframe {
 
 .Inminutes-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(184px, 1fr));
+  gap: 15px;
 }
 
 .Inminutes-product-card {
@@ -8689,6 +8688,7 @@ html {
 .aos-wrapper {
   display: flex;
   gap: 13px;
+  width: 100%;
 }
 
 .chat-input {
